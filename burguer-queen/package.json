@@ -1,7 +1,12 @@
 {
   "name": "burguer-queen",
   "version": "0.1.0",
+  "description": "Burguer Queen CLI",
+  "main": "index.js",
+  "author": "Anghel Melanie",
+  "license": "MIT",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -14,6 +19,7 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
+  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -37,5 +43,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Claudi4/LIM015-burger-queen-api-client.git"
+  },
+  "keywords": [
+    "material-ui",
+    "reactjs"
+  ],
+  "bugs": {
+    "url": "https://github.com/Claudi4/LIM015-burger-queen-api-client/issues"
   }
 }
