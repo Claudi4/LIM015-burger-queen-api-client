@@ -1,15 +1,16 @@
-// import logo from './logo.svg';
-import './App.css';
+import logo from './assets/logo.svg';
+import './assets/styles/App.css';
 import Button from '@mui/material/Button';
 
 function App() {
-  /* return (
+  return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <Button variant="contained">Hello World</Button>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -20,8 +21,8 @@ function App() {
         </a>
       </header>
     </div>
-  ); */
-  return <Button variant="contained">Hello World</Button>;
+  );
+  // return <Button variant="contained">Hello World</Button>;
 }
 
 export default App;
