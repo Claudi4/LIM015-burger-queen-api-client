@@ -1,11 +1,10 @@
 import React from "react";
+import MiniDrawer from "../components/MiniDrawer";
 
 const Admin =() =>{
-    return(
-        <div>
-            <h1>Administrador</h1>
-        </div>
-    )
+  return(
+    <MiniDrawer />
+  )
 }
 
 export default Admin
