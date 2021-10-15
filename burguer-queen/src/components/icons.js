@@ -22,4 +22,25 @@ export default {
   DehazeIcon,
   DeleteIcon,
   ShoppingCartIcon,
-}; */
+};
+
+import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+
+export const themeOptions: ThemeOptions = {
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#891e3c',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#f8a000',
+    },
+    background: {
+      paper: '#ffffff',
+      default: '#f2f2f2',
+    },
+  },
+};
+
+*/
