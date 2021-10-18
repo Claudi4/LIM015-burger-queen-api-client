@@ -4,7 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import fondo from '../assets/img/fondoHamburguesas.jpg';
 import logo from '../assets/img/Logo.svg';
 import {LockOutlined as LockOutlinedIcon} from '@material-ui/icons'
-
+import { useHistory, useLocation } from 'react-router-dom';
+import useAuth from "../services/auth/useAuth";
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +50,11 @@ const Login = () => {
     const[body,setBody] =useState({nickname:'',password:''})
     const classes = useStyles()
 
+    const history = useHistory();
+    const location = useLocation();
+    const previusObjectURL = location.state?.from;
+    const auth = useAuth();
+
     const handleChange = e => {
         setBody({
             ...body,
@@ -58,6 +64,9 @@ const Login = () => {
 
     const onSubmit=()=>{
         console.log(body);
+      // @parameters email, password
+      auth.login('amelanie.trillo27@gmail.com','Melanie#27');
+      history.push(previusObjectURL || "/admin")
     }
 
 
