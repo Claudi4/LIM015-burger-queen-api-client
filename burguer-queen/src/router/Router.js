@@ -1,55 +1,37 @@
-import React from "react";
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import Admin from "../pages/Admin";
-import EditProfile from "../pages/EditProfile";
-import HeadChef from "../pages/HeadChef";
+import React, { useState } from "react";
+import {BrowserRouter as Router, Redirect, Switch, Route} from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 import Login from "../pages/Login";
-import Waiter from "../pages/Waiter";
+import NotFound from "../pages/NotFound";
+import Loader from "../components/Loader";
+import Modal from "../components/Modal";
+import AdminRouter from "./AdminRouter";
+import ChefRouter from "./ChefRouter";
+import WaiterRouter from "./WaiterRouter";
 
-
-function RouterPage() {
-  /*
-  import Button from '@mui/material/Button';
-  <div className="App">
-          <div>
-            <Link to="/">
-              <Button variant="contained">Login</Button>
-            </Link>
-            <Link to="/edit-profile">
-              <Button variant="contained">Edit</Button>
-                  </Link>
-                  <Link to="/admin">
-                      <Button variant="contained">Admin</Button>
-                  </Link>
-                  <Link to="/head-chef">
-                      <Button variant="contained">Chef</Button>
-                  </Link>
-                  <Link to="/waiter">
-                      <Button variant="contained">Waiter</Button>
-                  </Link>
-              </div>
-    </div> */
+function AppRouter() {
+  const [modal, setModal] = useState(null);
+  const [loader, setLoader] = useState(null);
   return (
     <Router>
+      {loader && <Loader />}
+      {modal && <Modal modal={modal} setModal={setModal} setLoader={setLoader}/>}
       <Switch>
-        <Route path="/edit-profile">
-          <EditProfile />
+        <Route exact path="/login">
+          <Redirect to="/" />
         </Route>
-        <Route path="/admin">
-          <Admin />
-        </Route>
-        <Route path="/head-chef">
-          <HeadChef />
-        </Route>
-        <Route path="/waiter">
-          <Waiter />
-        </Route>
-        <Route path="/">
-          <Login />
+        <PublicRoute exact path="/" component={Login} />
+        <PrivateRoute path="/admin" component={AdminRouter} />
+        <PrivateRoute path="/chef" component={ChefRouter} />
+        <PrivateRoute path="/waiter" component={WaiterRouter} />
+        <Route path="/404" component={NotFound} />
+        <Route path="*">
+          <Redirect to="/404" />
         </Route>
       </Switch>
     </Router>
   );
 }
 
-export default RouterPage;
+export default AppRouter;
