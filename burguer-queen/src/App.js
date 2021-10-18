@@ -1,11 +1,14 @@
 import React from "react";
-import RouterPage from "./router/Router";
+import AuthProvider from "./services/auth/AuthProvider";
+import AppRouter from "./router/Router";
 import './assets/styles/App.css';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <RouterPage/>
+      <AuthProvider>
+        <AppRouter/>
+      </AuthProvider>
     </div>
   );
 }
