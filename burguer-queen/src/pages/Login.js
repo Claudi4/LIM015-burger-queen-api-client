@@ -1,17 +1,21 @@
 import React from "react";
 import logo from "../assets/images/Logo.svg";
-import { useHistory, useLocation } from 'react-router-dom';
 import useAuth from "../services/auth/useAuth";
 
 export default function Login() {
-  const history = useHistory();
-  const location = useLocation();
-  const previusObjectURL = location.state?.from;
   const auth = useAuth();
   const handleLogin = () => {
     // @parameters email, password
-    auth.login('amelanie.trillo27@gmail.com','Melanie#27');
-    history.push(previusObjectURL || "/admin")
+    const user = auth.login('mesero@gmail.com','Mesero#2021');
+    user
+      .then((response) => {
+        if(response.err) {
+          console.error(response);
+        } // Mostrar errores
+        else {
+          // hacer algo con la data login o nada
+        }
+      });
   }
   return (
     <div>
