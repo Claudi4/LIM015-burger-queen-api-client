@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/styles/index.css';
 import App from './App';
-import {theme} from '../src/assets/themeConfi';
-import {ThemeProvider} from '@material-ui/styles';
+import theme from './assets/themeConfig.js';
+import { ThemeProvider } from '@mui/material/styles';
 
 
 ReactDOM.render(
