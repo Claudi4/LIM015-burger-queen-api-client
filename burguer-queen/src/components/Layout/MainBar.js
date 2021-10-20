@@ -8,17 +8,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from '../../assets/images/Logo.svg';
 import useAuth from "../../services/auth/useAuth";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(theme => ({
-  iconLogout: {
-    backgroundColor: theme.palette.primary.main
-  },
-  iconButton: {
-    backgroundColor: theme.palette.secondary.main
-  },
-
-}))
 
 
 const drawerWidth = 180;
@@ -47,7 +36,6 @@ const ToolBar = styled(Toolbar, {})(() => ({
   }));
 
 const MainBar = ({open, handleDrawerOpen}) => {
-  const classes = useStyles()
   const auth = useAuth();
   const LogOut = () => {
     auth.logout();
@@ -57,8 +45,7 @@ const MainBar = ({open, handleDrawerOpen}) => {
     <AppBar position="fixed" open={open}>
       <ToolBar>
         <IconButton
-          //color="inherit"
-          className={classes.iconButton}
+          color="inherit"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
@@ -71,7 +58,7 @@ const MainBar = ({open, handleDrawerOpen}) => {
         </IconButton>
         <img height="60px" src={logo} className="logo" alt="Burguer Queen" />
         <IconButton
-          //color="inherit"
+          color="inherit"
           aria-label="log out"
           onClick={LogOut}
         >
