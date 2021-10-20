@@ -1,66 +1,42 @@
-import React from "react"; //{ useState }
-import logo from "../assets/img/Logo.svg";
+import React from "react";
+import { Grid, Paper, Box, TextField, Button, CssBaseline, InputAdornment } from "@mui/material";
+// import { makeStyles } from '@mui/styles';
+import fondo from '../assets/img/fondo4.png';
+import logo from '../assets/img/Logo.svg';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useAuth from "../services/auth/useAuth";
-import {
-  Grid,
-  Paper,
-  Box,
-  TextField,
-  Button,
-  CssBaseline,
-} from "@mui/material";
-// import { makeStyles } from '@mui/system';
-import fondo from "../assets/img/fondoHamburguesas.jpg";
-// import VisibilityIcon from '@mui/icons-material/Visibility';
+import IconButton from '@mui/material/IconButton';
 
-/* const useStyles = makeStyles((theme) => ({
-  root: {
-    //backgroundImage: `url(${fondo})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "100vh",
-  },
-  container: {
-    opacity: "0.8",
-    height: "60%",
-    marginTop: theme.spacing(10),
-    [theme.breakpoints.down(400 + theme.spacing(2) + 2)]: {
-      marginTop: 0,
-      with: "100%",
-      height: "100%",
-    },
-  },
-  div: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
+/* const useStyles = makeStyles(theme => ({
   button: {
-    margin: theme.spacing(3, 0, 2),
-  },
-})); */
+    marginBottom: '3rem',
+    backgroundColor: theme?.palette?.primary.main
+  }
+})) */
 
 const Login = () => {
+  // const classes = useStyles()
   const auth = useAuth();
-  /* const [body, setBody] = useState({ email: "", password: "" }); */
-  // const classes = useStyles();
 
-  /* const handleChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
-    });
-  }; */
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    showPassword: false,
+  });
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -78,71 +54,92 @@ const Login = () => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <CssBaseline />
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-          background: `linear-gradient( 91.7deg, rgba(50,25,79,0.75) -4.3%, rgba(33, 23, 82,0.75) 101.8% ), url(${fondo}) no-repeat center center`,
-          backgroundSize: "cover"
-        }}
-        alt="brand"
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Box
+    <div>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
           sx={{
-            py: 8,
-            mx: 4,
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center"
+            background: `url(${fondo}) no-repeat center center`,
+            backgroundSize: "cover"
           }}
-        >
+          alt="brand">
+        </Grid>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-          >
-            <img src={logo} style={{ width: 200, m: "1rem" }} alt="logo" />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Correo electrónico"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Contraseña"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Iniciar sesión
-            </Button>
+            sx={{
+              py: 8,
+              mx: 4,
+              height: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}>
+              <img src={logo} style={{ width: 200, m: "1rem" }} alt="logo" />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Correo electrónico"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={values.email}
+                onChange={handleChange("email")}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position='end'>
+                      <IconButton>
+                        <AccountCircleIcon />
+                      </IconButton>
+                    </InputAdornment>
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Contraseña"
+                type={values.showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="current-password"
+                onChange={handleChange("password")}
+                value={values.password}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position='end'>
+                      <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                        {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                }}
+              />
+              <Button
+                id="signInButton"
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Iniciar sesión
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    </div>
+  )
+}
 
 export default Login;
