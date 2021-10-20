@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Grid, Paper, Container, Typography, TextField, Button, CssBaseline } from "@material-ui/core";
+import { Grid, Paper, Container, Typography, TextField, Button, CssBaseline, InputAdornment } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import fondo from '../assets/img/fondo4.png';
 import logo from '../assets/img/Logo.svg';
+import {AccountCircle, LockRounded} from '@material-ui/icons'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 //import {LockOutlined as LockOutlinedIcon} from '@material-ui/icons'
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation} from 'react-router-dom';
 import useAuth from "../services/auth/useAuth";
+import IconButton from '@mui/material/IconButton';
 
 
 
@@ -33,10 +37,6 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center'
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main
-    },
     form: {
         width: '100%',
         marginTop: theme.spacing(1)
@@ -50,7 +50,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Login = () => {
-    const [body, setBody] = useState({ nickname: '', password: '' })
     const classes = useStyles()
 
     const history = useHistory();
@@ -58,20 +57,37 @@ const Login = () => {
     const previusObjectURL = location.state?.from;
     const auth = useAuth();
 
-    const handleChange = e => {
-        setBody({
-            ...body,
-            [e.target.name]: e.target.value
-        })
-    }
+
+
+
+    const [values, setValues] = React.useState({
+        nickname: '',
+        password: '',
+        showPassword: false,
+    });
+      
+      const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+      
+      const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+      
+    const handleNicknameChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const handlePasswordChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
 
     const onSubmit = () => {
-        console.log(body);
-        // @parameters email, password
-        auth.login('amelanie.trillo27@gmail.com', 'Melanie#27');
-        history.push(previusObjectURL || "/admin")
-    }
-
+      console.log(values);
+      // @parameters email, password
+      auth.login('amelanie.trillo27@gmail.com', 'Melanie#27');
+      history.push(previusObjectURL || "/admin")
+  }
 
     return (
         <div>
@@ -87,7 +103,7 @@ const Login = () => {
                                 <img src={logo} style={{ width: 200, height: 180 }} alt='logo' />
                             </Grid>
                             <Typography component='h1' variant='h5'>Sign In</Typography>
-                            <form className={classes.from}>
+                            <form className={classes.form}>
                                 <TextField
                                     fullWidth
                                     autoFocus
@@ -96,23 +112,45 @@ const Login = () => {
                                     variant='outlined'
                                     label='Nickname'
                                     name='nickname'
-                                    value={body.nickname}
-                                    onChange={handleChange}
+                                    value={values.nickname}
+                                    onChange={handleNicknameChange("nickname")}
+                                    InputProps={{
+                                      endAdornment:
+                                      <InputAdornment position='end'>
+                                        <IconButton>
+                                          <AccountCircle/>
+                                        </IconButton>
+                                      </InputAdornment>
+                                    }}
                                 />
                                 <TextField
+                                    type={values.showPassword ? "text" : "password"}
+                                    onChange={handlePasswordChange("password")}
                                     fullWidth
-                                    type='password'
                                     color='primary'
                                     margin='normal'
                                     variant='outlined'
                                     label='Password'
                                     name='password'
-                                    value={body.password}
-                                    onChange={handleChange}
+                                    value={values.password}
+                                    
+                                    InputProps={{
+                                      endAdornment:
+                                      <InputAdornment position='end'>
+                                        <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                                          { values.showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    }}
                                 />
+
+
+
+
+
+
                                 <Button
                                     fullWidth
-                                    //color='primary'
                                     variant='contained'
                                     className={classes.button}
                                     onClick={() => onSubmit()}
@@ -128,63 +166,3 @@ const Login = () => {
     )
 }
 export default Login;
-
-/*return (
-        <div>
-            <Grid container component="main" className={classes.root}>
-                <Grid item xs={12 } sm={6}>
-                    <img src={fondo} style={{width:'100%', height: '100%', objectFit: 'cover'}} alt='brand'/>
-                </Grid>
-                <CssBaseline/>
-                <Grid item xs={12 } sm={6} style={{padding:10}}>
-                    <Grid container justifyContent='center'>
-                    <img src={logo} style={{width:200}} alt='logo'/>
-
-                </Grid>
-                <Container component={Paper} elevation={5} maxWidth='xs' className= {classes.container}>
-                    <div className={classes.div}>
-                        <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>
-                        </Avatar>
-                        <Typography component = 'h1' variant = 'h5'>Sign In</Typography>
-                        <form className={classes.from}>
-                            <TextField
-                            fullWidth
-                            autoFocus
-                            color='primary'
-                            margin='normal'
-                            variant='outlined'
-                            label ='Nickname'
-                            name= 'nickname'
-                            value={body.nickname}
-                            onChange={handleChange}
-                            />
-                            <TextField
-                            fullWidth
-                            type='password'
-                            color='primary'
-                            margin='normal'
-                            variant='outlined'
-                            label ='Password'
-                            name= 'password'
-                            value={body.password}
-                            onChange={handleChange}
-                            />
-                            <Button
-                            fullWidth
-                            color='primary'
-                            variant='contained'
-                            className = {classes.button}
-                            onClick={()=> onSubmit()}
-                            >
-                            Sign In
-                            </Button>
-                        </form>
-                    </div>
-                </Container>
-                </Grid>
-            </Grid>
-        </div>
-    )
-}
-export default Login;*/
