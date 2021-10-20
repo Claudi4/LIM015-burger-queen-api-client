@@ -1,131 +1,148 @@
-import React,{useState} from "react";
-import { Grid, Paper, Container , Avatar, Typography, TextField, Button,CssBaseline} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import fondo from '../assets/img/fondoHamburguesas.jpg';
-import logo from '../assets/img/Logo.svg';
-import {LockOutlined as LockOutlinedIcon} from '@material-ui/icons'
-import { useHistory, useLocation } from 'react-router-dom';
+import React from "react"; //{ useState }
+import logo from "../assets/img/Logo.svg";
 import useAuth from "../services/auth/useAuth";
+import {
+  Grid,
+  Paper,
+  Box,
+  TextField,
+  Button,
+  CssBaseline,
+} from "@mui/material";
+// import { makeStyles } from '@mui/system';
+import fondo from "../assets/img/fondoHamburguesas.jpg";
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        //backgroundImage: `url(${fondo})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '100vh'
+/* const useStyles = makeStyles((theme) => ({
+  root: {
+    //backgroundImage: `url(${fondo})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    height: "100vh",
+  },
+  container: {
+    opacity: "0.8",
+    height: "60%",
+    marginTop: theme.spacing(10),
+    [theme.breakpoints.down(400 + theme.spacing(2) + 2)]: {
+      marginTop: 0,
+      with: "100%",
+      height: "100%",
     },
-    container: {
-        opacity:'0.8',
-        height: '60%',
-        marginTop: theme.spacing(10),
-        [theme.breakpoints.down(400 + theme.spacing(2)+2)]: {
-        marginTop: 0,
-        with: '100%',
-        height: '100%'
-        }
-    },
-    div:{
-        marginTop: theme.spacing(8),
-        display:'flex',
-        flexDirection: 'column',
-        alignItems:'center'
-    },
-    avatar:{
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main
-    },
-    form:{
-        width:'100%',
-        marginTop: theme.spacing(1)
-    },
-    button:{
-        margin: theme.spacing(3,0,2)
-    }
-
-}))
+  },
+  div: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  button: {
+    margin: theme.spacing(3, 0, 2),
+  },
+})); */
 
 const Login = () => {
-    const[body,setBody] =useState({nickname:'',password:''})
-    const classes = useStyles()
+  const auth = useAuth();
+  /* const [body, setBody] = useState({ email: "", password: "" }); */
+  // const classes = useStyles();
 
-    const history = useHistory();
-    const location = useLocation();
-    const previusObjectURL = location.state?.from;
-    const auth = useAuth();
+  /* const handleChange = (e) => {
+    setBody({
+      ...body,
+      [e.target.name]: e.target.value,
+    });
+  }; */
 
-    const handleChange = e => {
-        setBody({
-            ...body,
-            [e.target.name]:e.target.value
-        })
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const user = auth.login(data.get("email"), data.get("password"));
+    user
+      .then((response) => {
+        if (response.err) {
+          console.error(response);
+        } // Mostrar errores
+        else {
+          // hacer algo con la data login o nada
+        }
+      });
+  };
 
-    const onSubmit=()=>{
-        console.log(body);
-      // @parameters email, password
-      auth.login('amelanie.trillo27@gmail.com','Melanie#27');
-      history.push(previusObjectURL || "/admin")
-    }
+  return (
+    <Grid container component="main" sx={{ height: "100vh" }}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          background: `linear-gradient( 91.7deg, rgba(50,25,79,0.75) -4.3%, rgba(33, 23, 82,0.75) 101.8% ), url(${fondo}) no-repeat center center`,
+          backgroundSize: "cover"
+        }}
+        alt="brand"
+      />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Box
+          sx={{
+            py: 8,
+            mx: 4,
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 1 }}
+          >
+            <img src={logo} style={{ width: 200, m: "1rem" }} alt="logo" />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Correo electrónico"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Iniciar sesión
+            </Button>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
+  );
+};
 
-
-    return (
-        <div>
-            <Grid container component="main" className={classes.root}>
-                <Grid item xs={12 } sm={6}>
-                    <img src={fondo} style={{width:'100%', height: '100%', objectFit: 'cover'}} alt='brand'/>
-                </Grid>
-                <CssBaseline/>
-                <Grid item xs={12 } sm={6} style={{padding:10}}>
-                    <Grid container justifyContent='center'>
-                    <img src={logo} style={{width:200}} alt='logo'/>
-                    
-                </Grid>
-                <Container component={Paper} elevation={5} maxWidth='xs' className= {classes.container}>
-                    <div className={classes.div}>
-                        <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>   
-                        </Avatar>
-                        <Typography component = 'h1' variant = 'h5'>Sign In</Typography>
-                        <form className={classes.from}>
-                            <TextField
-                            fullWidth
-                            autoFocus
-                            color='primary'
-                            margin='normal'
-                            variant='outlined'
-                            label ='Nickname'
-                            name= 'nickname'
-                            value={body.nickname}
-                            onChange={handleChange}
-                            />
-                            <TextField
-                            fullWidth
-                            type='password'
-                            color='primary'
-                            margin='normal'
-                            variant='outlined'
-                            label ='Password'
-                            name= 'password'
-                            value={body.password}
-                            onChange={handleChange}
-                            />
-                            <Button
-                            fullWidth
-                            color='primary'
-                            variant='contained'
-                            className = {classes.button}
-                            onClick={()=> onSubmit()}
-                            >
-                            Sign In
-                            </Button>
-                        </form>
-                    </div>
-                </Container>
-                </Grid>
-            </Grid>
-        </div>
-    )
-}
 export default Login;

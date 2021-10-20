@@ -3,13 +3,14 @@ import useAuth from "../services/auth/useAuth";
 
 export default function PublicRoute({ component: Component, ...rest }) {
   const auth = useAuth();
- // TODO: Agregar redireccionamiento a paginas
+  let redirect = '/';
+  if (auth.isLogged()) redirect = auth.urlRol();
   return (
     <Route {...rest}>
       {!auth.isLogged() ? (
         <Component />
       ) : (
-        <Redirect to="/admin"/>
+        <Redirect to={redirect}/>
       )}
     </Route>
   );
