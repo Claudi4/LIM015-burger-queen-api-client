@@ -3,14 +3,22 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const DrawerList = ({routes, url}) => {
   const newUrl = url.slice(-1) === '/' ? url.slice(0, -1): url;
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  let { pathname } = useLocation();
+  const path = pathname.replace(newUrl, '');
+  const route = routes.map((item, index) => {
+    if (path === item.route) {
+      return index + 1;
+    }
+    return 0;
+  })
+  const initialSelectedIndex = route.filter((item) => item !== 0)[0]??0;
+  const [selectedIndex, setSelectedIndex] = React.useState(initialSelectedIndex);
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
@@ -30,18 +38,6 @@ const DrawerList = ({routes, url}) => {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem
-        button
-        component={RouterLink}
-        to={`${newUrl}/perfil`}
-        selected={selectedIndex === 1}
-        onClick={() => handleListItemClick(1)}
-      >
-        <ListItemIcon sx={{ minWidth: '40px' }}>
-          <AccountCircleIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Perfil" />
-      </ListItem>
         {
           routes.map((item, index) => {
             const { text, icon } = item;
@@ -51,8 +47,8 @@ const DrawerList = ({routes, url}) => {
                 key={text}
                 component={RouterLink}
                 to={`${newUrl}/${text.toLowerCase()}`}
-                selected={selectedIndex === (index + 2)}
-                onClick={() => handleListItemClick((index + 2))}
+                selected={selectedIndex === (index + 1)}
+                onClick={() => handleListItemClick((index + 1))}
               >
                 {icon && <ListItemIcon sx={{ minWidth: '40px' }}>{icon}</ListItemIcon>}
                 <ListItemText primary={text} />

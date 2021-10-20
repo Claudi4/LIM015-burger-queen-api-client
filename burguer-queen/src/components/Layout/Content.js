@@ -3,14 +3,14 @@ import {
   useParams, Redirect,
 } from "react-router-dom";
 
-function Topic({rol, routes}) {
+function Topic({ routes }) {
   let { topicId } = useParams();
   const matchRoutes = routes?.filter((item) => item.text.toLowerCase() === topicId);
-  const redirect = topicId !== 'perfil' ? matchRoutes.length === 0 ? true : false : false;
+  const redirect = matchRoutes.length === 0 ? true : false;
   return (
     <div>
       { redirect && <Redirect to="/404"/> }
-      <h3>{topicId}</h3>
+      { matchRoutes[0].main }
     </div>
   );
 }

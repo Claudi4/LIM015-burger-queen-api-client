@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid, Paper, Box, TextField, Button, CssBaseline, InputAdornment } from "@mui/material";
-// import { makeStyles } from '@mui/styles';
 import fondo from '../assets/img/fondo4.png';
 import logo from '../assets/img/Logo.svg';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -9,15 +8,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useAuth from "../services/auth/useAuth";
 import IconButton from '@mui/material/IconButton';
 
-/* const useStyles = makeStyles(theme => ({
-  button: {
-    marginBottom: '3rem',
-    backgroundColor: theme?.palette?.primary.main
-  }
-})) */
-
 const Login = () => {
-  // const classes = useStyles()
   const auth = useAuth();
 
   const [values, setValues] = React.useState({
@@ -130,7 +121,7 @@ const Login = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, p: 2 }}
               >
                 Iniciar sesión
               </Button>

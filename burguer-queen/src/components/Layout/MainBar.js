@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -42,7 +41,7 @@ const MainBar = ({open, handleDrawerOpen}) => {
   };
 
   return (
-    <AppBar position="fixed" open={open}>
+    <AppBar position="fixed" open={open} color="secondary">
       <ToolBar>
         <IconButton
           color="inherit"

@@ -1,25 +1,37 @@
 import React from "react";
-import { Switch, Route} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Box from '@mui/material/Box';
 import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
+import useAuth from "../services/auth/useAuth";
 
 import BookIcon from '@mui/icons-material/Book';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const AdminRouter = () => {
+const WaiterRouter = () => {
   const routes = [
     {
-      text: 'Mesas',
-      icon: <RestaurantIcon />
+      route: '/perfil',
+      text: 'Perfil',
+      icon: <AccountCircleIcon />,
+      main: <h2>Perfil</h2>
     },
     {
+      route: '/mesas',
+      text: 'Mesas',
+      icon: <RestaurantIcon />,
+      main: <h2>Mesas</h2>
+    },
+    {
+      route: '/pedidos',
       text: 'Pedidos',
-      icon: <BookIcon />
+      icon: <BookIcon />,
+      main: <h2>Pedidos</h2>
     },
   ];
-
+  const auth = useAuth();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => setOpen(true);
@@ -27,6 +39,7 @@ const AdminRouter = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {auth.urlRol() !== "/waiter" && <Redirect to={auth.urlRol()}/>}
       <MainBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <SideBar open={open} handleDrawerClose={handleDrawerClose} routes={routes} />
       <Box component="main" sx={{
@@ -47,4 +60,4 @@ const AdminRouter = () => {
   );
 };
 
-export default AdminRouter;
+export default WaiterRouter;
