@@ -12,7 +12,7 @@ export const helpHttp = () => {
     options.body = JSON.stringify(options.body) || false;
     if (!options.body) delete options.body;
 
-    setTimeout(() => controller.abort(), 4000);
+    setTimeout(() => controller.abort(), 5000);
     return fetch(endpoint, options)
       .then(async (res) => res.ok
         ? res.json()
@@ -24,7 +24,7 @@ export const helpHttp = () => {
           })
       )
       .catch((error) => ({
-        err: true, message: error.message, status: '500', statusText: 'Ocurrió un error',
+        err: true, message: error.message, ...error,
       }));
   };
 

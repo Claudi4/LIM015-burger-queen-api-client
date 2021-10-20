@@ -1,168 +1,145 @@
-import React, { useState } from "react";
-import { Grid, Paper, Container, Typography, TextField, Button, CssBaseline, InputAdornment } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { Grid, Paper, Box, TextField, Button, CssBaseline, InputAdornment } from "@mui/material";
+// import { makeStyles } from '@mui/styles';
 import fondo from '../assets/img/fondo4.png';
 import logo from '../assets/img/Logo.svg';
-import {AccountCircle, LockRounded} from '@material-ui/icons'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-//import {LockOutlined as LockOutlinedIcon} from '@material-ui/icons'
-import { useHistory, useLocation} from 'react-router-dom';
 import useAuth from "../services/auth/useAuth";
 import IconButton from '@mui/material/IconButton';
 
-
-
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        //backgroundImage: `url(${fondo})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '100vh'
-    },
-    container: {
-        opacity: '0.8',
-        marginTop: theme.spacing(10),
-        [theme.breakpoints.down(400 + theme.spacing(2) + 2)]: {
-            marginTop: 0,
-            with: '100%',
-            height: '100%'
-        }
-    },
-    div: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1)
-    },
-    button: {
-        margin: theme.spacing(3, 0, 2),
-        marginBottom: '3rem',
-        backgroundColor: theme.palette.primary.main
-    }
-
-}))
+/* const useStyles = makeStyles(theme => ({
+  button: {
+    marginBottom: '3rem',
+    backgroundColor: theme?.palette?.primary.main
+  }
+})) */
 
 const Login = () => {
-    const classes = useStyles()
+  // const classes = useStyles()
+  const auth = useAuth();
 
-    const history = useHistory();
-    const location = useLocation();
-    const previusObjectURL = location.state?.from;
-    const auth = useAuth();
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    showPassword: false,
+  });
 
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
-    const [values, setValues] = React.useState({
-        nickname: '',
-        password: '',
-        showPassword: false,
-    });
-      
-      const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-      
-      const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-      
-    const handleNicknameChange = (prop) => (event) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const user = auth.login(data.get("email"), data.get("password"));
+    user
+      .then((response) => {
+        if (response.err) {
+          console.error(response);
+        } // Mostrar errores
+        else {
+          // hacer algo con la data login o nada
+        }
+      });
+  };
 
-    const handlePasswordChange = (prop) => (event) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
-
-    const onSubmit = () => {
-      console.log(values);
-      // @parameters email, password
-      auth.login('amelanie.trillo27@gmail.com', 'Melanie#27');
-      history.push(previusObjectURL || "/admin")
-  }
-
-    return (
-        <div>
-            <Grid container component="main" className={classes.root}>
-                <Grid item xs={12} sm={6}>
-                    <img src={fondo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt='brand' />
-                </Grid>
-                <CssBaseline />
-                <Grid item xs={12} sm={6} style={{ padding: 10 }}>
-                    <Container component={Paper} elevation={5} maxWidth='xs' className={classes.container}>
-                        <div className={classes.div}>
-                            <Grid container justifyContent='center'>
-                                <img src={logo} style={{ width: 200, height: 180 }} alt='logo' />
-                            </Grid>
-                            <Typography component='h1' variant='h5'>Sign In</Typography>
-                            <form className={classes.form}>
-                                <TextField
-                                    fullWidth
-                                    autoFocus
-                                    color='primary'
-                                    margin='normal'
-                                    variant='outlined'
-                                    label='Nickname'
-                                    name='nickname'
-                                    value={values.nickname}
-                                    onChange={handleNicknameChange("nickname")}
-                                    InputProps={{
-                                      endAdornment:
-                                      <InputAdornment position='end'>
-                                        <IconButton>
-                                          <AccountCircle/>
-                                        </IconButton>
-                                      </InputAdornment>
-                                    }}
-                                />
-                                <TextField
-                                    type={values.showPassword ? "text" : "password"}
-                                    onChange={handlePasswordChange("password")}
-                                    fullWidth
-                                    color='primary'
-                                    margin='normal'
-                                    variant='outlined'
-                                    label='Password'
-                                    name='password'
-                                    value={values.password}
-                                    
-                                    InputProps={{
-                                      endAdornment:
-                                      <InputAdornment position='end'>
-                                        <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
-                                          { values.showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                                        </IconButton>
-                                      </InputAdornment>
-                                    }}
-                                />
-
-
-
-
-
-
-                                <Button
-                                    fullWidth
-                                    variant='contained'
-                                    className={classes.button}
-                                    onClick={() => onSubmit()}
-                                >
-                                    Sign In
-                                </Button>
-                            </form>
-                        </div>
-                    </Container>
-                </Grid>
-            </Grid>
-        </div>
-    )
+  return (
+    <div>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            background: `url(${fondo}) no-repeat center center`,
+            backgroundSize: "cover"
+          }}
+          alt="brand">
+        </Grid>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              py: 8,
+              mx: 4,
+              height: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}>
+              <img src={logo} style={{ width: 200, m: "1rem" }} alt="logo" />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Correo electrónico"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={values.email}
+                onChange={handleChange("email")}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position='end'>
+                      <IconButton>
+                        <AccountCircleIcon />
+                      </IconButton>
+                    </InputAdornment>
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Contraseña"
+                type={values.showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="current-password"
+                onChange={handleChange("password")}
+                value={values.password}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position='end'>
+                      <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                        {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                }}
+              />
+              <Button
+                id="signInButton"
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Iniciar sesión
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </div>
+  )
 }
+
 export default Login;
