@@ -1,20 +1,30 @@
 import React from "react";
-import { Switch, Route} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Box from '@mui/material/Box';
 import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
+import useAuth from "../services/auth/useAuth";
 
 import BookIcon from '@mui/icons-material/Book';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ChefRouter = () => {
   const routes = [
     {
+      route: '/perfil',
+      text: 'Perfil',
+      icon: <AccountCircleIcon />,
+      main: <h2>Perfil</h2>
+    },
+    {
+      route: '/pedidos',
       text: 'Pedidos',
-      icon: <BookIcon />
+      icon: <BookIcon />,
+      main: <h2>Pedidos</h2>
     },
   ];
-
+  const auth = useAuth();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => setOpen(true);
@@ -22,6 +32,7 @@ const ChefRouter = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {auth.urlRol() !== "/chef" && <Redirect to={auth.urlRol()}/>}
       <MainBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <SideBar open={open} handleDrawerClose={handleDrawerClose} routes={routes} />
       <Box component="main" sx={{
