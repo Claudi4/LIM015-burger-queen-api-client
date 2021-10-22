@@ -7,8 +7,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useAuth from "../services/auth/useAuth";
 import IconButton from '@mui/material/IconButton';
+import { useForm, Controller } from 'react-hook-form';
 
 const Login = () => {
+  const { handleSubmit, control } = useForm();
   const auth = useAuth();
 
   const [values, setValues] = React.useState({
@@ -25,14 +27,9 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const user = auth.login(data.get("email"), data.get("password"));
+  const onSubmit = event => {
+    console.log(event);
+    const user = auth.login(event.email, event.password);
     user
       .then((response) => {
         if (response.err) {
@@ -73,58 +70,102 @@ const Login = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               sx={{ mt: 1 }}>
               <img src={logo} style={{ width: 200, m: "1rem" }} alt="logo" />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Correo electrónico"
+              <Controller
                 name="email"
-                autoComplete="email"
-                autoFocus
-                value={values.email}
-                onChange={handleChange("email")}
-                InputProps={{
-                  endAdornment:
-                    <InputAdornment position='end'>
-                      <IconButton>
-                        <AccountCircleIcon />
-                      </IconButton>
-                    </InputAdornment>
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    variant="outlined"
+                    value={value}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    type="email"
+                    margin="normal"
+                    fullWidth
+                    id="email"
+                    label="Correo electrónico"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    InputProps={{
+                      endAdornment:
+                        <InputAdornment position='end'>
+                          <IconButton>
+                            <AccountCircleIcon />
+                          </IconButton>
+                        </InputAdornment>
+                    }}
+                  />
+                )}
+                rules={{
+                  required: 'Email required',
+                  pattern: {
+                    value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: 'Debes usar un email válido',
+                  },
                 }}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
+              <Controller
                 name="password"
-                label="Contraseña"
-                type={values.showPassword ? "text" : "password"}
-                id="password"
-                autoComplete="current-password"
-                onChange={handleChange("password")}
-                value={values.password}
-                InputProps={{
-                  endAdornment:
-                    <InputAdornment position='end'>
-                      <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
-                        {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    variant="outlined"
+                    value={value}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    margin="normal"
+                    fullWidth
+                    name="password"
+                    label="Contraseña"
+                    type={values.showPassword ? "text" : "password"}
+                    id="password"
+                    autoComplete="current-password"
+                    InputProps={{
+                      endAdornment:
+                        <InputAdornment position='end'>
+                          <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                            {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                    }}
+                  />
+                )}
+                rules={{
+                  required: 'Contraseña requerida',
+                  minLength: {
+                    value: 8,
+                    message: 'Contraseña debe tener al menos 8 caracteres',
+                  },
+                  pattern: {
+                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                    message:
+                      'Contraseña debe tener al menos 1 caracter alfabético y 1 caracter numérico',
+                  },
+                  validate: {
+                    equals: password =>
+                      password !== 'password123#' || 'Escoge una contraseña mas segura',
+                  },
                 }}
               />
-              <Button
-                id="signInButton"
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, p: 2 }}
-              >
-                Iniciar sesión
-              </Button>
+              <div>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  id="signInButton"
+                  fullWidth
+                  sx={{ mt: 3, mb: 2, p: 2 }}>
+                  Iniciar sesión
+                </Button>
+              </div>
             </Box>
           </Box>
         </Grid>
