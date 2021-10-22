@@ -8,7 +8,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import logo from '../../assets/images/Logo.svg';
 import useAuth from "../../services/auth/useAuth";
 
-
 const drawerWidth = 180;
 
 const AppBar = styled(MuiAppBar, {

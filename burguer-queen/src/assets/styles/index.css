@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, 'Roboto', BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -14,4 +14,14 @@ code {
 
 #signInButton {
   background-color: #F8A000;
+}
+
+.css-heg063-MuiTabs-flexContainer {
+  justify-content: space-evenly;
+}
+
+@media only screen and (max-width: 400px) {
+  .css-heg063-MuiTabs-flexContainer {
+    justify-content: flex-start;
+  }
 }

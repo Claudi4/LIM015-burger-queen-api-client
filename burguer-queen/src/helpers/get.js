@@ -34,6 +34,8 @@ export const getDataById = async (id, path, token) => {
 
 export const getData = async (path, token) => {
   try {
+    const userAuth =JSON.parse(sessionStorage.getItem("user"));
+    console.log(userAuth);
     let options = {
       headers: {
         "content-type": "application/json",
