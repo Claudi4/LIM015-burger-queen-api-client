@@ -2,12 +2,13 @@ import { helpHttp } from "./helpHttp";
 
 const url = 'https://api-burguerqueen-am27th.herokuapp.com';
 
-export const deleteDataById = async (id, path, token) => {
+export const deleteDataById = async (path, id) => {
   try {
+    const userAuth = JSON.parse(sessionStorage.getItem("user"));
     let options = {
       headers: {
         "content-type": "application/json",
-        "authorization": `Bearer ${token}`,
+        "authorization": `Bearer ${userAuth.token}`,
       },
     };
     const response = await helpHttp().delete(`${url}/${path}/${id}`, options)
