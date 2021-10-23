@@ -32,14 +32,13 @@ export const getDataById = async (id, path, token) => {
   }
 }
 
-export const getData = async (path, token) => {
+export const getData = async (path) => {
   try {
-    const userAuth =JSON.parse(sessionStorage.getItem("user"));
-    console.log(userAuth);
+    const userAuth = JSON.parse(sessionStorage.getItem("user"));
     let options = {
       headers: {
         "content-type": "application/json",
-        "authorization": `Bearer ${token}`,
+        "authorization": `Bearer ${userAuth.token}`,
       },
     };
     const response = await helpHttp().get(`${url}/${path}`, options)

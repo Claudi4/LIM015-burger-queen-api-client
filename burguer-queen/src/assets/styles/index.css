@@ -20,6 +20,11 @@ code {
   justify-content: space-evenly;
 }
 
+.css-wjh20t-MuiPagination-ul {
+  justify-content: center;
+}
+
+
 @media only screen and (max-width: 400px) {
   .css-heg063-MuiTabs-flexContainer {
     justify-content: flex-start;

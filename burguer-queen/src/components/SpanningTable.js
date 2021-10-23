@@ -6,8 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 const TAX_RATE = 0.18;
 
@@ -15,30 +16,14 @@ function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
 function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  return items.map(({ totalPrice }) => totalPrice).reduce((sum, i) => sum + i, 0);
 }
 
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-];
-
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
-export default function SpanningTable() {
+export default function SpanningTable({products, deleteProduct}) {
+  const invoiceSubtotal = subtotal(products);
+  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
   return (
     <TableContainer component={Paper}>
       <Table aria-label="spanning table">
@@ -57,22 +42,23 @@ export default function SpanningTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
+          {products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell>{product.name}</TableCell>
               <TableCell align="right">
-                <TextField
-                  size="small"
-                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                  defaultValue={row.qty}
-                  />
+                {product.quantity}
               </TableCell>
               <TableCell align="right">
-                {row.unit}
+                {ccyFormat(product.price)}
               </TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+              <TableCell align="right">{ccyFormat(product.totalPrice)}</TableCell>
               <TableCell align="right">
-                <DeleteIcon color="secondary"/>
+                <IconButton onClick={()=>deleteProduct(product.id)}>
+                  <DeleteIcon color="secondary"/>
+                </IconButton>
+                <IconButton onClick={()=>deleteProduct(product.id, true)}>
+                  <ClearAllIcon color="secondary"/>
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
