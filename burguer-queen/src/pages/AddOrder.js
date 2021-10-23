@@ -10,6 +10,7 @@ import useAuth from "../services/auth/useAuth";
 import { shoppingInitialState, shoppingReducer } from "../services/orders/useAddOrder";
 import { TYPES } from "../services/orders/actions";
 import { getData } from "../helpers/get";
+import { postData } from "../helpers/post";
 
 export default function AddOrder() {
   const auth = useAuth();
@@ -61,9 +62,18 @@ export default function AddOrder() {
           qty: product.quantity,
           productId: product.id,
       }))
-      // TODO: Agregar order API
-      clearCart();
-      // console.log(data, auth.user.token)
+      // setLoading(true);
+      postData('orders', data)
+        .then((response) => {
+          if (!response.err) {
+            // TODO: Agregar modal se agrego producto
+            clearCart();
+            //setError(null);
+          } else {
+            // setError(response);
+          }
+        })
+      // setLoading(false);
     }
   }
 

@@ -17,12 +17,13 @@ export const getUserById = async (email, token) => {
   }
 }
 
-export const getDataById = async (id, path, token) => {
+export const getDataById = async (path, id) => {
   try {
+    const userAuth = JSON.parse(sessionStorage.getItem("user"));
     let options = {
       headers: {
         "content-type": "application/json",
-        "authorization": `Bearer ${token}`,
+        "authorization": `Bearer ${userAuth.token}`,
       },
     };
     const response = await helpHttp().get(`${url}/${path}/${id}`, options)
