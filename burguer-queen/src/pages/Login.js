@@ -45,7 +45,6 @@ const Login = () => {
   };
 
   const onSubmit = event => {
-    console.log(event);
     const user = auth.login(event.email, event.password);
     user
       .then((response) => {

@@ -38,7 +38,7 @@ const ChefRouter = () => {
       <Box component="main" sx={{
           flexGrow: 1,
           p: 2,
-          height: '100vh',
+          minHeight: '80vh',
           marginTop: '80px',
           overflow: 'auto',
       }}>

@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
+import AddOrder from "../pages/AddOrder";
 import useAuth from "../services/auth/useAuth";
 
 import BookIcon from '@mui/icons-material/Book';
@@ -22,7 +23,7 @@ const WaiterRouter = () => {
       route: '/mesas',
       text: 'Mesas',
       icon: <RestaurantIcon />,
-      main: <h2>Mesas</h2>
+      main: <AddOrder />
     },
     {
       route: '/pedidos',
@@ -45,7 +46,7 @@ const WaiterRouter = () => {
       <Box component="main" sx={{
           flexGrow: 1,
           p: 2,
-          height: '100vh',
+          minHeight: '80vh',
           marginTop: '80px',
           overflow: 'auto',
       }}>
