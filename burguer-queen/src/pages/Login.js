@@ -8,6 +8,23 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useAuth from "../services/auth/useAuth";
 import IconButton from '@mui/material/IconButton';
 import { useForm, Controller } from 'react-hook-form';
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4
+};
+
+let errorMessage = '';
 
 const Login = () => {
   const { handleSubmit, control } = useForm();
@@ -33,13 +50,28 @@ const Login = () => {
     user
       .then((response) => {
         if (response.err) {
+          /* obtenemos le error y lo alamacenamos en una variable (errorMessage) */
           console.error(response);
+          console.log('mensaje de error....', response.message);
+          /* hacemos una validacion para cambiar el valor de la respuesta del mensaje */
+          if(response.message === 'Not found')
+          errorMessage = 'El usuario no existe.';
+          else {
+            /* si es diferente de not fount almacenamos el valor que trae el servicio */
+          errorMessage = response.message;
+          }
+          /* abrimos el modal */
+          handleOpen();
         } // Mostrar errores
         else {
           // hacer algo con la data login o nada
         }
       });
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <div>
@@ -147,7 +179,7 @@ const Login = () => {
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
                     message:
-                      'Contraseña debe tener al menos 1 caracter alfabético y 1 caracter numérico',
+                      'Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter eapecial',
                   },
                   validate: {
                     equals: password =>
@@ -170,6 +202,22 @@ const Login = () => {
           </Box>
         </Grid>
       </Grid>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {/* mostarmos la data almacenada en el servicio */}
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {errorMessage}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Por favor ingresar un usuario valido.
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   )
 }
