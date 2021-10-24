@@ -49,21 +49,8 @@ const Login = () => {
     user
       .then((response) => {
         if (response.err) {
-          /* obtenemos le error y lo alamacenamos en una variable (errorMessage) */
-          console.error(response);
-          console.log('mensaje de error....', response.message);
-          /* hacemos una validacion para cambiar el valor de la respuesta del mensaje */
-          if(response.message === 'Not found')
-          errorMessage = 'El usuario no existe.';
-          else {
-            /* si es diferente de not fount almacenamos el valor que trae el servicio */
-          errorMessage = response.message;
-          }
-          /* abrimos el modal */
+          errorMessage = response.message === 'Not found' ? 'El usuario no existe.' : response.message;
           handleOpen();
-        } // Mostrar errores
-        else {
-          // hacer algo con la data login o nada
         }
       });
   };

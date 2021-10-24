@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ modal, setModal, setLoader }) {
+export default function BasicModal({ modal, setModal, title, message }) {
   const handleClose = () => setModal(false);
   return (
     <Modal
@@ -34,10 +34,10 @@ export default function BasicModal({ modal, setModal, setLoader }) {
         <Fade in={modal}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
+              {title}
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              {message}
             </Typography>
           </Box>
         </Fade>
