@@ -14,3 +14,20 @@ export const signIn = async (data) => {
     return { err: true, message: error.message, status: '500', statusText: 'Ocurrió un error'};
   }
 }
+
+export const postData = async (path, data) => {
+  try {
+    const userAuth = JSON.parse(sessionStorage.getItem("user"));
+    let options = {
+      headers: {
+        "content-type": "application/json",
+        "authorization": `Bearer ${userAuth.token}`,
+      },
+      body: data,
+    };
+    const response = await helpHttp().post(`${url}/${path}`, options)
+    return response;
+  } catch (error) {
+    return { err: true, message: error.message, status: '500', statusText: 'Ocurrió un error'};
+  }
+}

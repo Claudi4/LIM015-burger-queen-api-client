@@ -1,6 +1,5 @@
 export const helpHttp = () => {
   const customFetch = (endpoint, options) => {
-    // https://api-burguerqueen-am27th.herokuapp.com/
     const defaultHeader = {
       accept: "application/json",
     };
