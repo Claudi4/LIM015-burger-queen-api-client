@@ -69,7 +69,6 @@ export default function AddOrder() {
           if (!response.err) {
             // TODO: Agregar modal se agrego producto
             clearCart();
-            setTimeout(() => {}, 3000)
             // setError(null);
           } else {
             // setError(response);

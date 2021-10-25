@@ -11,17 +11,17 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
-export default function BasicTable({ table }) {
+export default function BasicTable({ table, deleteUser, updateUser }) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table" size="small">
         <TableHead>
           <TableRow>
-          {table.header.map((header, index) => <TableCell align="center" key={index}>{header}</TableCell>)}
+          {table?.header?.map((header, index) => <TableCell align="center" key={index}>{header}</TableCell>)}
           </TableRow>
         </TableHead>
         <TableBody>
-          {table.body.map((user) => (
+          {table?.body?.map((user) => (
             <TableRow
               key={user._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -30,12 +30,12 @@ export default function BasicTable({ table }) {
               <TableCell component="th" scope="row">{user.email}</TableCell>
               <TableCell>{user.roles}</TableCell>
               <TableCell size="small" align="center">
-                <IconButton>
+                <IconButton onClick={() => updateUser(user._id)}>
                   <CreateIcon color="secondary"/>
                 </IconButton>
               </TableCell>
               <TableCell size="small" align="center">
-                <IconButton>
+                <IconButton onClick={() => deleteUser(user.email)}>
                   <DeleteIcon color="secondary"/>
                 </IconButton>
               </TableCell>
