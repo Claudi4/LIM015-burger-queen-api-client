@@ -5,6 +5,8 @@ import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
 import useAuth from "../services/auth/useAuth";
+import Colaborators from "../pages/Colaborators";
+import Products from "../pages/Products";
 
 import GroupIcon from '@mui/icons-material/Group';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -22,13 +24,13 @@ const AdminRouter = () => {
       route: '/colaboradores',
       text: 'Colaboradores',
       icon: <GroupIcon />,
-      main: <h2>Colaborators</h2>
+      main: <Colaborators />
     },
     {
       route: '/productos',
       text: 'Productos',
       icon: <ShoppingCartIcon />,
-      main: <h2>Products</h2>
+      main: <Products />
     },
   ];
   const auth = useAuth();
