@@ -22,6 +22,7 @@ import { deleteDataById } from "../helpers/delete";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { updateData } from "../helpers/put";
 
 const style = {
   position: "absolute",
@@ -65,7 +66,6 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
         if (!response.err) {
           // TODO: Agregar modal se agrego producto
           // setError(null);
-          console.log('se agrego usuario')
           const { _id, email, roles } = response;
           const newUser = {
             _id, email, roles: roles.rol
@@ -175,7 +175,7 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
             value:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
             message:
-              "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter eapecial",
+              "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial",
           },
           validate: {
             equals: (password) =>
@@ -265,6 +265,201 @@ const DeleteUserForm = ({data, table, setTable, handleClose}) => {
   );
 };
 
+const UpdateUserForm = ({data, table, setTable, handleClose}) => {
+  const { handleSubmit, control } = useForm();
+  const [loading, setLoading] = React.useState(false);
+  const [values, setValues] = React.useState({
+    email: "",
+    password: "",
+    rol: "",
+    showPassword: false,
+  });
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const updateUser = (event) => {
+    const newData = {}
+    if (data.email !== event.email) newData.email = event.email;
+    if (event.password !== '') newData.password = event.password;
+    if (event.rol !== 'select') newData.roles = {
+      rol: event.rol,
+      admin: event.rol === 'admin',
+    }
+    setLoading(true);
+    updateData('users', data.email, newData)
+      .then((response) => {
+        if (!response.err) {
+          setTable({
+            ...table,
+            body: table.body.map((item) => {
+              if (item._id === data._id){
+                return {
+                  ...item,
+                  roles: response.roles.rol,
+                }
+              } else {
+                return item
+              }})
+          });
+        } else {
+          console.log(response)
+        }
+        setLoading(false);
+        handleClose();
+      })
+  };
+
+  return (
+    <Box>
+      <Box
+        id="modal-description"
+        component="form"
+        noValidate
+        onSubmit={handleSubmit(updateUser)}
+      >
+        <Controller
+          name="email"
+          control={control}
+          defaultValue={data.email}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              variant="outlined"
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error ? error.message : null}
+              type="email"
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Correo electrónico"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <AccountCircleIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+          rules={{
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              message: "Debes usar un email válido",
+            },
+          }}
+        />
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              variant="outlined"
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error ? error.message : null}
+              margin="normal"
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type={values.showPassword ? "text" : "password"}
+              id="password"
+              autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {values.showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+          rules={{
+            minLength: {
+              value: 8,
+              message: "Contraseña debe tener al menos 8 caracteres",
+            },
+            pattern: {
+              value:
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+              message:
+                "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial",
+            },
+            validate: {
+              equals: (password) =>
+                password !== "password123#" || "Escoge una contraseña mas segura",
+            },
+          }}
+        />
+        <Controller
+          name="rol"
+          control={control}
+          defaultValue="select"
+          render={({ field: { onChange, value } }) => (
+            <FormControl fullWidth sx={{ marginTop: 2 }}>
+              <InputLabel id="roles">Rol</InputLabel>
+              <Select
+                labelId="roles"
+                id="rol"
+                value={value}
+                label="Rol"
+                onChange={onChange}
+              >
+                <MenuItem value="select">Seleccionar</MenuItem>
+                <MenuItem value="mesero">Mesero</MenuItem>
+                <MenuItem value="chef">Chef</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+        <ButtonGroup
+          fullWidth
+          sx={{ marginTop: 1 }}
+          disableElevation
+          variant="contained"
+        >
+          <Button
+            sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+            onClick={handleClose}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="contained"
+            disabled={loading}
+            type="submit"
+          >
+            Actualizar usuario
+          </Button>
+        </ButtonGroup>
+      </Box>
+    </Box>
+  );
+};
+
 export default function BasicModal({ modal, setModal, actionForm, table, setTable }) {
   const handleClose = () => setModal(false);
   return (
@@ -286,6 +481,7 @@ export default function BasicModal({ modal, setModal, actionForm, table, setTabl
           </Typography>
           { actionForm?.nameForm === 'add' && <AddUserForm handleClose={handleClose} table={table} setTable={setTable}/>}
           { actionForm?.nameForm === 'delete' && <DeleteUserForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable}/>}
+          { actionForm?.nameForm === 'update' && <UpdateUserForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable}/>}
         </Box>
       </Fade>
     </Modal>

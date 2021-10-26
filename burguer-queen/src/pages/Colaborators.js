@@ -13,6 +13,7 @@ const Colaborators = () => {
   const [ modalError, setModalError ] = useState(false);
   const [ actionForm, setActionForm ] = useState();
   const [ error, setError ] = useState(null);
+
   useEffect(() => {
     let controller = new AbortController();
     getData("users?limit=1000").then((response) => {
@@ -56,9 +57,15 @@ const Colaborators = () => {
     // setModalError(true);
   }
 
-  const updateUser = (id) => {
-    setModalError(true);
-    setError({ title: 'update', message: id });
+  const updateUser = (user) => {
+    setActionForm({
+      title: 'Actualizar usuario',
+      nameForm: 'update',
+      data: user,
+    })
+    setModal(true);
+    // setModalError(true);
+    // setError({ title: 'update', message: email });
   }
 
   return (
