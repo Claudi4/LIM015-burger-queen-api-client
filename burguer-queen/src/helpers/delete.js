@@ -11,7 +11,7 @@ export const deleteDataById = async (path, id) => {
         "authorization": `Bearer ${userAuth.token}`,
       },
     };
-    const response = await helpHttp().delete(`${url}/${path}/${id}`, options)
+    const response = await helpHttp().del(`${url}/${path}/${id}`, options)
     return response;
   } catch (error) {
     return { err: true, message: error.message, status: '500', statusText: 'Ocurrió un error'};
