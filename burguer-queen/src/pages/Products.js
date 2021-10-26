@@ -1,19 +1,18 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-const NotFound = () => {
+const Products = () => {
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
       }}
     >
-      <h1>No encontrado</h1>
+      <h1>Productos</h1>
     </Box>
   );
 };
 
-export default NotFound;
+export default Products;
