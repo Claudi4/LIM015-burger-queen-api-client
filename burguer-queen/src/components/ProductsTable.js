@@ -1,28 +1,27 @@
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableFooter from '@mui/material/TableFooter';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import TableFooter from '@mui/material/TableFooter';
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
-export default function BasicTable({ table, deleteUser, updateUser }) {
+export default function BasicTable({ table, updateProduct, deleteProduct}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  // Avoid a layout jump when reaching the last page with empty rows.
+  
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - table?.body?.length) : 0;
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+      setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -36,7 +35,7 @@ export default function BasicTable({ table, deleteUser, updateUser }) {
     const to = page === 0 ? rowsPerPage : (page*rowsPerPage+rowsPerPage > count ? count : page*rowsPerPage+rowsPerPage );
     return `${from}-${to} de ${count !== -1 ? count : `más de ${count}`}`;
   }
-
+  
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table" size="small">
@@ -46,21 +45,23 @@ export default function BasicTable({ table, deleteUser, updateUser }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {table?.body?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+          {table?.body?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product) => (
             <TableRow
-              key={user._id}
+              key={product._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell>{user._id}</TableCell>
-              <TableCell component="th" scope="row">{user.email}</TableCell>
-              <TableCell>{user.roles}</TableCell>
+              <TableCell >{product._id}</TableCell>
+              <TableCell align="center">{product.image}</TableCell>
+              <TableCell align="center">{product.name}</TableCell>
+              <TableCell align="center">{product.type}</TableCell>
+              <TableCell align="center">{product.price}</TableCell>
               <TableCell size="small" align="center">
-                <IconButton onClick={() => updateUser(user)}>
+                <IconButton onClick={() => updateProduct(product)}>
                   <CreateIcon color="secondary"/>
                 </IconButton>
               </TableCell>
               <TableCell size="small" align="center">
-                <IconButton onClick={() => deleteUser(user.email)}>
+                <IconButton onClick={() => deleteProduct(product._id)}>
                   <DeleteIcon color="secondary"/>
                 </IconButton>
               </TableCell>
@@ -71,7 +72,7 @@ export default function BasicTable({ table, deleteUser, updateUser }) {
               <TableCell colSpan={5} />
             </TableRow>
           )}
-        </TableBody>
+          </TableBody>
         <TableFooter>
           <TableRow>
             <TablePagination

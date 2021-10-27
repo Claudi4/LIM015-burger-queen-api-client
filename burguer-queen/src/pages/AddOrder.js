@@ -24,6 +24,7 @@ export default function AddOrder() {
   useEffect(() => {
     // setLoading(true);
     getData("products?limit=1000").then((response) => {
+      console.log(response);
       if (!response.err) {
         dispatch({ type: TYPES.READ_PRODUCTS, payload: response });
         //setError(null);
@@ -69,7 +70,6 @@ export default function AddOrder() {
           if (!response.err) {
             // TODO: Agregar modal se agrego producto
             clearCart();
-            setTimeout(() => {}, 3000)
             // setError(null);
           } else {
             // setError(response);

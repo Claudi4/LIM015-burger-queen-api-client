@@ -1,53 +1,84 @@
-// TODO
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import Table from "../components/UsersTable";
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import UsersForms from '../components/UsersForms';
+import Modal from '../components/Modal';
+import { getData } from "../helpers/get";
 
 const Colaborators = () => {
-  const table = {
-    header: ['Id', 'Correo electrónico', 'Rol', 'Editar', 'Borrar'],
-    body: [
-      {
-        _id: 'id1',
-        email: 'chef@a.com',
-        roles: {
-          rol: 'chef',
-        }
-      },
-      {
-        _id: 'id2',
-        email: 'mesero@a.com',
-        roles: {
-          rol: 'mesero',
-        }
-      },
-      {
-        _id: 'id3',
-        email: 'admin@a.com',
-        roles: {
-          rol: 'admin',
-        }
+  const [ table, setTable] = useState(null);
+  const [ modal, setModal ] = useState(false);
+  const [ modalError, setModalError ] = useState(false);
+  const [ actionForm, setActionForm ] = useState();
+  const [ error, setError ] = useState(null);
+
+  useEffect(() => {
+    let controller = new AbortController();
+    getData("users?limit=1000").then((response) => {
+      if (!response.err) {
+        setTable({
+          header: ['Id', 'Correo electrónico', 'Rol', 'Editar', 'Borrar'],
+          body: response.map((user) => ({
+            ...user,
+            roles: user.roles.rol
+          }))
+        })
+        setError(null);
+      } else {
+        setError({
+          title: 'Error',
+          message: response.message
+        });
+        setModalError(true);
       }
-    ]
+      controller = null;
+    });
+    return () => controller?.abort();
+  }, []);
+
+  const addUser = () => {
+    setActionForm({
+      title: 'Agregar usuario',
+      nameForm: 'add'
+    })
+    setModal(true);
   }
-  table.body = table.body.map((user) => ({
-    ...user,
-    roles: user.roles.rol
-  }))
-  const [ modal, setModal ] = useState(true);
+
+  const deleteUser = (email) => {
+    setActionForm({
+      title: '¿Seguro que desea borrar usuario?',
+      nameForm: 'delete',
+      data: email,
+    })
+    setModal(true);
+    // setError({ title: 'delete', message: email });
+    // setModalError(true);
+  }
+
+  const updateUser = (user) => {
+    setActionForm({
+      title: 'Actualizar usuario',
+      nameForm: 'update',
+      data: user,
+    })
+    setModal(true);
+    // setModalError(true);
+    // setError({ title: 'update', message: email });
+  }
+
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
         <h1>Colaboradores</h1>
-        <IconButton>
+        <IconButton onClick={addUser}>
           <AddCircleIcon color="success"/>
         </IconButton>
       </Box>
-      <UsersForms modal={modal} setModal={setModal} title="Hola" message="hi"/>
-      <Table table={table}/>
+      <Table table={table} deleteUser={deleteUser} updateUser={updateUser}/>
+      <UsersForms modal={modal} setModal={setModal} actionForm={actionForm} table={table} setTable={setTable}/>
+      <Modal modal={modalError} setModal={setModalError} title={error?.title} message={error?.message}/>
     </Box>
   );
 };

@@ -54,7 +54,7 @@ export default function BasicTabs({ products, addProduct}) {
         <Pagination counter={3}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ProductListCard type="Almuerzo" products={products} addProduct={addProduct}/>
+        <ProductListCard type="Almuerzo y cena" products={products} addProduct={addProduct}/>
         <Pagination counter={3}/>
       </TabPanel>
     </Box>
