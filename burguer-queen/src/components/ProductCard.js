@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import sinImagen from '../assets/images/sinImagen.webp';
 
 export default function ProductCard({product, addProduct}) {
   const { id, name, price, image } = product;
@@ -12,7 +13,7 @@ export default function ProductCard({product, addProduct}) {
       <CardMedia
         component="img"
         sx={{ width: "58px" }}
-        image={image}
+        image={(image || sinImagen)}
         alt={name}
       />
       <Box sx={{ display: 'flex' }}>
