@@ -13,6 +13,7 @@ const Products = () => {
     const [ modalError, setModalError ] = useState(false);
     const [ actionForm, setActionForm ] = useState();
     const [ error, setError ] = useState(null);
+    
     useEffect(() => {
       let controller = new AbortController();
       getData("products?limit=1000").then((response) => {
@@ -37,7 +38,7 @@ const Products = () => {
     return () => controller?.abort();
   }, []);
 
-  const addUser = () => {
+  const addProducts = () => {
     setActionForm({
       title: 'Agregar Producto',
       nameForm: 'add'
@@ -51,19 +52,24 @@ const Products = () => {
       nameForm: 'delete',
       data: products,
     })
-    setModal(true);  
+    setModal(true);
     }
   
-    const updateProduct = (id) => {
-      setModalError(true);
-      setError({ title: 'Editar producto', message: id });
+    const updateProduct = (products) => {
+      setActionForm({
+      title: 'Actualizar producto',
+      nameForm: 'update',
+      data: products,
+      })
+    setModal(true);
+
     }
 
     return (
       <Box>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           <h1>Productos</h1>
-          <IconButton onClick={addUser}>
+          <IconButton onClick={addProducts}>
             <AddCircleIcon color="success"/>
           </IconButton>
         </Box>

@@ -5,11 +5,9 @@ import {
     Box,
     ButtonGroup,
     Button,
-    InputAdornment,
     Modal,
     FormControl,
     MenuItem,
-    IconButton,
     TextField,
     Typography,
     InputLabel,
@@ -18,10 +16,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { postData } from "../helpers/post";
 import { deleteDataById } from "../helpers/delete";
-
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { updateData } from "../helpers/put";
 
 const style = {
     position: "absolute",
@@ -35,44 +30,36 @@ const style = {
     p: 4,
 };
 
-const AddUserForm = ({ table, setTable, handleClose }) => {
+const AddProductsForm = ({ table, setTable, handleClose }) => {
     const { handleSubmit, control } = useForm();
-    const [values, setValues] = React.useState({
-        email: "",
-        password: "",
-        rol: "",
-        showPassword: false,
+    const [values] = React.useState({
+        image: "",
+        name: "",
+        type: "",
+        price: "",
     });
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const onSubmit = (event) => {
+    const onSubmit = (products) => {
         const data = {
-            email: event.email,
-            password: event.password,
-            roles: {
-                rol: event.rol,
-                admin: (event.rol === 'admin'),
-            },
+            //image: products.image,
+            name: products.name,
+            type: products.type,
+            price: products.price
         }
-        postData('users', data)
+        postData('products', data)
             .then((response) => {
                 if (!response.err) {
                     // TODO: Agregar modal se agrego producto
                     // setError(null);
                     console.log('se agrego PRODUCTO')
-                    const { _id, email, roles } = response;
-                    const newUser = {
-                        _id, email, roles: roles.rol
+                    const { _id,name, type, price } = response;
+                    //const { image, name, type, price } = response;
+                    const newProducts = {
+                        _id,name, type, price
                     };
                     setTable({
                         ...table,
-                        body: [newUser, ...table.body]
+                        body: [newProducts, ...table.body]
                     })
                     handleClose();
                 } else {
@@ -91,7 +78,7 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
             onSubmit={handleSubmit(onSubmit)}
         >
             <Controller
-                name="email"
+                name="name"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -101,36 +88,27 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
-                        type="email"
+                        type="name"
                         margin="normal"
                         fullWidth
-                        id="email"
-                        label="Correo electrónico"
-                        name="email"
-                        autoComplete="email"
+                        id="name"
+                        label="name"
+                        name="name"
+                        autoComplete="name"
                         autoFocus
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton>
-                                        <AccountCircleIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
                     />
                 )}
                 rules={{
-                    required: "Email required",
+                    required: "Products required",
                     pattern: {
                         value:
-                            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                        message: "Debes usar un email válido",
+                        /^[A-Z]+$/i,
+                        message: "Debes ingresar un producto válido",
                     },
                 }}
             />
             <Controller
-                name="password"
+                name="price"
                 control={control}
                 defaultValue=""
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -142,68 +120,43 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
                         helperText={error ? error.message : null}
                         margin="normal"
                         fullWidth
-                        name="password"
-                        label="Contraseña"
-                        type={values.showPassword ? "text" : "password"}
-                        id="password"
-                        autoComplete="current-password"
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                    >
-                                        {values.showPassword ? (
-                                            <VisibilityIcon />
-                                        ) : (
-                                            <VisibilityOffIcon />
-                                        )}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
+                        name="price"
+                        label="price"
+                        type={values ? "text" : "price"}
+                        id="price"
+                        autoComplete="current-price"
                     />
                 )}
                 rules={{
-                    required: "Contraseña requerida",
-                    minLength: {
-                        value: 8,
-                        message: "Contraseña debe tener al menos 8 caracteres",
-                    },
-                    pattern: {
+                    required: "Precio requerida",
+                        pattern: {
                         value:
-                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                        /^[0-9.]+$/ ,
                         message:
-                            "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter eapecial",
-                    },
-                    validate: {
-                        equals: (password) =>
-                            password !== "password123#" || "Escoge una contraseña mas segura",
+                        "Debes ingresar solo numeros",
                     },
                 }}
             />
             <Controller
-                name="rol"
+                name="type"
                 control={control}
-                defaultValue="mesero"
+                defaultValue="Desayuno"
                 render={({ field: { onChange, value } }) => (
                     <FormControl fullWidth sx={{ marginTop: 2 }}>
-                        <InputLabel id="roles">Rol</InputLabel>
+                        <InputLabel id="type">Categoria</InputLabel>
                         <Select
-                            labelId="roles"
-                            id="rol"
+                            labelId="type"
+                            id="type"
                             value={value}
-                            label="Rol"
+                            label="Categoria"
                             onChange={onChange}
                         >
-                            <MenuItem value="mesero">Mesero</MenuItem>
-                            <MenuItem value="chef">Chef</MenuItem>
-                            <MenuItem value="admin">Admin</MenuItem>
+                            <MenuItem value="Desayuno">Desayuno</MenuItem>
+                            <MenuItem value="Almuerzo y cena">Almuerzo y cena</MenuItem>
                         </Select>
                     </FormControl>
                 )}
-                rules={{ required: "Rol requerido" }}
+                rules={{ required: "Categoria Requerida" }}
             />
             <Button
                 type="submit"
@@ -213,22 +166,22 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
                 fullWidth
                 sx={{ mt: 3, mb: 2, p: 2 }}
             >
-                Crear usuario
+                Crear producto
             </Button>
         </Box>
     );
 };
 
-const DeleteUserForm = ({ data, table, setTable, handleClose }) => {
+const DeleteProductsForm = ({ data, table, setTable, handleClose }) => {
     const [loading, setLoading] = React.useState(false);
-    const deleteUser = () => {
+    const deleteProduct = () => {
         setLoading(true);
-        deleteDataById('users', data)
+        deleteDataById('products', data)
             .then((response) => {
                 if (!response.err) {
                     setTable({
                         ...table,
-                        body: table.body.filter((item) => item.email !== data)
+                        body: table.body.filter((item) => item._id !== data)
                     });
                 } else {
                     console.log(response)
@@ -240,7 +193,7 @@ const DeleteUserForm = ({ data, table, setTable, handleClose }) => {
 
     return (
         <Box>
-            <Box py="1rem">Correo de usuario: {data}</Box>
+            <Box py="1rem">Producto: {data}</Box>
             <ButtonGroup
                 fullWidth
                 sx={{ marginTop: 1 }}
@@ -256,14 +209,169 @@ const DeleteUserForm = ({ data, table, setTable, handleClose }) => {
                 <Button
                     variant="contained"
                     disabled={loading}
-                    onClick={deleteUser}
+                    onClick={deleteProduct}
                 >
-                    Borrar usuario
+                    Borrar producto
                 </Button>
             </ButtonGroup>
         </Box>
     );
 };
+
+const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
+    console.log('DATA PARA ACTUALIZAR: ', data);
+    const { handleSubmit, control } = useForm();
+    const [loading, setLoading] = React.useState(false);
+
+
+    const updateProdutds = (event) => {
+        console.log(event);
+        const newData = {}
+        if (data.name !== event.producto) newData.name = event.producto;
+        if (data.price !== event.precio && event.precio !== '') newData.price = event.precio;
+        if (event.type !== '') newData.type = event.type; 
+        /*if (event.type !== 'select') newData.type = {
+            type: event.type,
+            desayuno: event.type === 'desayuno',
+        }*/
+        console.log(newData);
+        setLoading(true);
+        updateData('products', data._id, newData)
+            .then((response) => {
+                if (!response.err) {
+                    setTable({
+                        ...table,
+                        body: table.body.map((item) => {
+                            if (item._id === data._id) {
+                                return {
+                                    ...response,
+                                }
+                            } else {
+                                return item
+                            }
+                        })
+                    });
+                } else {
+                    console.log(response)
+                }
+                setLoading(false);
+                handleClose();
+            })
+    };
+
+    return (
+        <Box>
+            <Box
+                id="modal-description"
+                component="form"
+                noValidate
+                onSubmit={handleSubmit(updateProdutds)}
+            >
+                <Controller
+                    name="producto"
+                    control={control}
+                    defaultValue={data.name}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                            variant="outlined"
+                            value={value}
+                            onChange={onChange}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            type="producto"
+                            margin="normal"
+                            fullWidth
+                            id="producto"
+                            label="producto"
+                            name="producto"
+                            autoComplete="producto"
+                            autoFocus
+                        />
+                    )}
+                    rules={{
+                        required: "Products required",
+                        pattern: {
+                            value:
+                            /^[A-Z]+$/i,
+                            message:
+                            "Debes ingresar un producto válido",
+                        },
+                    }}
+                />
+                <Controller
+                    name="precio"
+                    control={control}
+                    defaultValue={data.price}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                            variant="outlined"
+                            value={value}
+                            onChange={onChange}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            margin="normal"
+                            fullWidth
+                            name="precio"
+                            label="Precio"
+                            type="text"
+                            id="precio"
+                        />
+                    )}
+                    rules={{
+                        required: "Precio requerida",
+                        pattern: {
+                            value:
+                            /^[0-9.]+$/ ,
+                            message:
+                            "Debes ingresar solo numeros",
+                        },
+                    }}
+                />
+                <Controller
+                    name="type"
+                    control={control}
+                    defaultValue="Desayuno"
+                    render={({ field: { onChange, value } }) => (
+                        <FormControl fullWidth sx={{ marginTop: 2 }}>
+                            <InputLabel id="type">Categoria</InputLabel>
+                            <Select
+                                labelId="type"
+                                id="type"
+                                value={value}
+                                label="Categoria"
+                                onChange={onChange}
+                            >
+                                <MenuItem value="Desayuno">Desayuno</MenuItem>
+                                <MenuItem value="Almuerzo y cena">Almuerzo y cena</MenuItem>
+                            </Select>
+                        </FormControl>
+                    )}
+                />
+                <ButtonGroup
+                    fullWidth
+                    sx={{ marginTop: 1 }}
+                    disableElevation
+                    variant="contained"
+                >
+                    <Button
+                        sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+                        onClick={handleClose}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disabled={loading}
+                        type="submit"
+                    >
+                        Actualizar producto
+                    </Button>
+                </ButtonGroup>
+            </Box>
+        </Box >
+    );
+};
+
 
 export default function BasicModal({ modal, setModal, actionForm, table, setTable }) {
     const handleClose = () => setModal(false);
@@ -284,8 +392,9 @@ export default function BasicModal({ modal, setModal, actionForm, table, setTabl
                     <Typography id="modal-title" variant="h6" component="h2">
                         {actionForm?.title}
                     </Typography>
-                    {actionForm?.nameForm === 'add' && <AddUserForm handleClose={handleClose} table={table} setTable={setTable} />}
-                    {actionForm?.nameForm === 'delete' && <DeleteUserForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable} />}
+                    {actionForm?.nameForm === 'add' && <AddProductsForm handleClose={handleClose} table={table} setTable={setTable} />}
+                    {actionForm?.nameForm === 'delete' && <DeleteProductsForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable} />}
+                    {actionForm?.nameForm === 'update' && <UpdateProductsForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable} />}
                 </Box>
             </Fade>
         </Modal>
