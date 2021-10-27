@@ -13,7 +13,7 @@ const Products = () => {
     const [ modalError, setModalError ] = useState(false);
     const [ actionForm, setActionForm ] = useState();
     const [ error, setError ] = useState(null);
-    
+
     useEffect(() => {
       let controller = new AbortController();
       getData("products?limit=1000").then((response) => {
@@ -45,7 +45,7 @@ const Products = () => {
     })
     setModal(true);
   }
-  
+
   const deleteProduct = (products) => {
     setActionForm({
       title: '¿Seguro que desea borrar producto?',
@@ -54,15 +54,14 @@ const Products = () => {
     })
     setModal(true);
     }
-  
+
     const updateProduct = (products) => {
       setActionForm({
       title: 'Actualizar producto',
       nameForm: 'update',
       data: products,
       })
-    setModal(true);
-
+      setModal(true);
     }
 
     return (

@@ -5,6 +5,7 @@ import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
 import AddOrder from "../pages/AddOrder";
+import Orders from "../pages/Orders";
 import useAuth from "../services/auth/useAuth";
 
 import BookIcon from '@mui/icons-material/Book';
@@ -29,7 +30,7 @@ const WaiterRouter = () => {
       route: '/pedidos',
       text: 'Pedidos',
       icon: <BookIcon />,
-      main: <h2>Pedidos</h2>
+      main: <Orders />
     },
   ];
   const auth = useAuth();
