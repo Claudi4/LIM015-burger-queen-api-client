@@ -12,17 +12,26 @@ import {
   Chip,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import TimerIcon from '@mui/icons-material/Timer';
 
 export default function OrderCard({ order, action }) {
   const { _id, client, products, status, dateEntry, dateProcessed } = order;
   const subtotal = products.reduce((sum, item) => item.product.price + sum, 0);
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
+  //const fecha = Date(dateProcessed) - Date(dateEntry);
+  const fecha = new Date(dateEntry);
+  console.log(fecha)
+  console.log(new Date(dateProcessed))
+  console.log(new Date(Date.parse(dateProcessed) - Date.parse(dateEntry)));
 
   return (
     <Card sx={{ display: "flex" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
-        <Box></Box>
+        <Box>
+          <TimerIcon/>
+          {fecha.toString()}
+        </Box>
         <b>Pedido:</b> {_id} <br />
         <b>Cliente:</b> {client} <br />
         <b>Estado:</b>

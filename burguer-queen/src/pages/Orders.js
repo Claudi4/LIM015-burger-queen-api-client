@@ -9,6 +9,7 @@ const Orders = () => {
       {
         qty: 2,
         product: {
+          _id: 'asdfsdag',
           name: "hamburguesa",
           price: 5,
         },
@@ -16,14 +17,15 @@ const Orders = () => {
       {
         qty: 2,
         product: {
+          _id: 'asdfg',
           name: "hamburguesa doble",
           price: 5,
         },
       },
     ],
     status: "pendiente",
-    dateEntry: Date.now(),
-    dateProcessed: Date.now(),
+    dateEntry: "2021-10-23T20:51:21.376+00:00",
+    dateProcessed: "2021-10-19T01:54:30.378+00:00",
   };
   return (
     <Box>
