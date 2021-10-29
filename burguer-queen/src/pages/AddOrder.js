@@ -23,8 +23,9 @@ export default function AddOrder() {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     // setLoading(true);
+    let cancel = false;
     getData("products?limit=1000").then((response) => {
-      console.log(response);
+      if(cancel) return;
       if (!response.err) {
         dispatch({ type: TYPES.READ_PRODUCTS, payload: response });
         //setError(null);
@@ -34,6 +35,7 @@ export default function AddOrder() {
       }
     });
     // setLoading(false);
+    return () => { cancel = true };
   }, []);
 
   const handleChange = (event) => {

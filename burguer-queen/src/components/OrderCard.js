@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   Box,
+  Typography,
   Card,
   ButtonGroup,
   Button,
@@ -12,25 +13,65 @@ import {
   Chip,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import TimerIcon from "@mui/icons-material/Timer";
+import getTime from "../helpers/date";
 
 export default function OrderCard({ order, action }) {
   const { _id, client, products, status, dateEntry, dateProcessed } = order;
-  const subtotal = products.reduce((sum, item) => item.product.price + sum, 0);
+  const subtotal = products.reduce(
+    (sum, item) => item.product?.price ?? 0 + sum,
+    0
+  );
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
-
+  const time = getTime(dateProcessed, dateEntry);
+  let color = "info";
+  switch (status) {
+    case "pendiente" || "preparando":
+      color = "warning";
+      break;
+    case "listo":
+      color = "info";
+      break;
+    case "entregado":
+      color = "success";
+      break;
+    case "cancelado":
+      color = "error";
+      break;
+    default:
+      color = "info";
+      break;
+  }
   return (
     <Card sx={{ display: "flex" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
-        <Box></Box>
-        <b>Pedido:</b> {_id} <br />
-        <b>Cliente:</b> {client} <br />
-        <b>Estado:</b>
-        <Chip variant="outlined" color="warning" size="small" label={status} />
-        <br />
-        <b>Dia de entrada:</b> {dateEntry} <br />
-        <b>Dia procesado:</b> {dateProcessed} <br />
-        <b>Total a pagar:</b> S/.{total.toFixed(2)}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+            my: 1,
+          }}
+        >
+          <TimerIcon color={time.color} />
+          <Typography color={time.color}>{time.message}</Typography>
+        </Box>
+        <Box>
+          <Typography variant="p">
+            <b>Pedido:</b> {_id} <br />
+            <b>Cliente:</b> {client} <br />
+            <b>Estado:</b>
+            <Chip
+              variant="outlined"
+              color={color}
+              size="small"
+              label={status}
+            />
+            <br />
+            <b>Total a pagar:</b> S/.{total.toFixed(2)}
+          </Typography>
+        </Box>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -39,9 +80,11 @@ export default function OrderCard({ order, action }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((item) => (
-              <TableRow key={item.product._id}>
-                <TableCell>{item.product.name}</TableCell>
+            {products?.map((item) => (
+              <TableRow key={item.product?._id ?? 0}>
+                <TableCell>
+                  {item.product?.name ?? "Producto Borrado"}
+                </TableCell>
                 <TableCell align="center">{item.qty}</TableCell>
               </TableRow>
             ))}
