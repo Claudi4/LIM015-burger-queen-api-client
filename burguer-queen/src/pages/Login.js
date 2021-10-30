@@ -8,8 +8,6 @@ import {
   CssBaseline,
   InputAdornment,
 } from "@mui/material";
-// import fondo from "../assets/img/fondo4.png";
-// import logo from "../assets/img/Logo.svg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -73,10 +71,10 @@ const Login = () => {
         <CssBaseline />
         <Grid
           item
-          xs={false}
           sm={4}
           md={7}
           sx={{
+            display: { xs: 'none', sm: 'block' },
             background: `url(images/background.webp) no-repeat center center`,
             backgroundSize: "cover",
           }}
