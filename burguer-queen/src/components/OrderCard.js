@@ -43,6 +43,10 @@ export default function OrderCard({ order, action }) {
       color = "info";
       break;
   }
+
+  const styled = {
+    marginRight: '10px'
+  };
   return (
     <Card sx={{ display: "flex" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
@@ -58,15 +62,16 @@ export default function OrderCard({ order, action }) {
           <Typography color={time.color}>{time.message}</Typography>
         </Box>
         <Box>
-          <Typography variant="p">
+          <Typography variant="p" >
             <b>Pedido:</b> {_id} <br />
             <b>Cliente:</b> {client} <br />
-            <b>Estado:</b>
+            <b style={styled}>Estado:</b>
             <Chip
               variant="outlined"
               color={color}
               size="small"
               label={status}
+
             />
             <br />
             <b>Total a pagar:</b> S/.{total.toFixed(2)}
@@ -105,14 +110,14 @@ export default function OrderCard({ order, action }) {
                 opacity: 0.5,
               },
             }}
-            // onClick={handleClose}
+          // onClick={handleClose}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
             color={action.color}
-            // disabled={loading}
+          // disabled={loading}
           >
             {action.name}
           </Button>
