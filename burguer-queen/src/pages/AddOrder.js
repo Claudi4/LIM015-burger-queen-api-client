@@ -25,7 +25,7 @@ export default function AddOrder() {
     // setLoading(true);
     let cancel = false;
     getData("products?limit=1000").then((response) => {
-      if(cancel) return;
+      if (cancel) return;
       if (!response.err) {
         dispatch({ type: TYPES.READ_PRODUCTS, payload: response });
         //setError(null);
@@ -35,7 +35,9 @@ export default function AddOrder() {
       }
     });
     // setLoading(false);
-    return () => { cancel = true };
+    return () => {
+      cancel = true;
+    };
   }, []);
 
   const handleChange = (event) => {
@@ -67,18 +69,17 @@ export default function AddOrder() {
         qty: product.quantity,
         productId: product.id,
       }));
-      postData("orders", data)
-        .then((response) => {
-          if (!response.err) {
-            // TODO: Agregar modal se agrego producto
-            clearCart();
-            // setError(null);
-          } else {
-            // setError(response);
-            console.log(response)
-          }
-          setLoading(false);
-        });
+      postData("orders", data).then((response) => {
+        if (!response.err) {
+          // TODO: Agregar modal o snackbar se agrego producto
+          clearCart();
+          // setError(null);
+        } else {
+          // setError(response);
+          console.log(response);
+        }
+        setLoading(false);
+      });
     }
   };
 
@@ -118,11 +119,7 @@ export default function AddOrder() {
           >
             Cancelar
           </Button>
-          <Button
-            variant="contained"
-            disabled={loading}
-            onClick={addOrder}
-          >
+          <Button variant="contained" disabled={loading} onClick={addOrder}>
             Pedir orden
           </Button>
         </ButtonGroup>
