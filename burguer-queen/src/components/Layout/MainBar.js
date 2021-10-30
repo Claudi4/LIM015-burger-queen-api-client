@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import logo from '../../assets/images/Logo.svg';
+//import logo from '../../assets/images/Logo.svg';
 import useAuth from "../../services/auth/useAuth";
 
 const drawerWidth = 180;
@@ -54,7 +54,7 @@ const MainBar = ({open, handleDrawerOpen}) => {
         >
           <MenuIcon />
         </IconButton>
-        <img height="60px" src={logo} className="logo" alt="Burguer Queen" />
+        <img height="60px" src="../images/Logo.svg" className="logo" alt="Burguer Queen" />
         <IconButton
           color="inherit"
           aria-label="log out"

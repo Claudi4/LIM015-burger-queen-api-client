@@ -8,8 +8,8 @@ import {
   CssBaseline,
   InputAdornment,
 } from "@mui/material";
-import fondo from "../assets/img/fondo4.png";
-import logo from "../assets/img/Logo.svg";
+// import fondo from "../assets/img/fondo4.png";
+// import logo from "../assets/img/Logo.svg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -67,7 +67,6 @@ const Login = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
     <div>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -78,7 +77,7 @@ const Login = () => {
           sm={4}
           md={7}
           sx={{
-            background: `url(${fondo}) no-repeat center center`,
+            background: `url(images/background.webp) no-repeat center center`,
             backgroundSize: "cover",
           }}
           alt="brand"
@@ -100,7 +99,7 @@ const Login = () => {
             noValidate
             onSubmit={handleSubmit(onSubmit)}
           >
-            <img src={logo} loading="lazy" width="200px" height="90px" style={{ m: "1rem" }} alt="logo" />
+            <img src="./images/redLogo.svg" width="200px" height="90px" style={{ m: "1rem" }} alt="logo" />
             <Controller
               name="email"
               control={control}
