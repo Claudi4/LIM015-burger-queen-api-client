@@ -1,9 +1,15 @@
 import React from "react";
 import { Box, Grid, CssBaseline,Button,Typography } from "@mui/material";
 import notfound2 from '../assets/img/notfound2.png';
-
+import { useHistory } from "react-router-dom";
 
 const NotFound = () => {
+  
+    let history = useHistory();
+  
+    function goLogin() {
+      history.push("/login");
+    }
   return (
     <Grid textAlign="center" sx={{ mt: 2 }}>
       <CssBaseline />
@@ -39,10 +45,11 @@ const NotFound = () => {
         id="signInButton"
         fullWidth
         sx={{ mt: 0, mb: 2, p: 2 }}
-      >
+        onClick={goLogin}
+        >
         Volver al inicio
       </Button>
-      </Box>
+      </Box> 
     </Grid>
     </Grid>
   );
