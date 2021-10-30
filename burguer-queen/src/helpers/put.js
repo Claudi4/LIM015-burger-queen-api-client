@@ -18,3 +18,22 @@ export const updateData = async (path, id, data) => {
     return { err: true, message: error.message, status: '500', statusText: 'Ocurrió un error'};
   }
 }
+
+export const updateOrders = async (path, id, status) => {
+  console.log('idOrder',id);
+  console.log('statusOrder',status);
+  try {
+    const userAuth = JSON.parse(sessionStorage.getItem("user"));
+    let options = {
+      headers: {
+        "content-type": "application/json",
+        "authorization": `Bearer ${userAuth.token}`,
+      },
+      body: status,
+    };
+    const response = await helpHttp().put(`${url}/${path}/${id}`, options)
+    return response;
+  } catch (error) {
+    return { err: true, message: error.message, status: '500', statusText: 'Ocurrió un error'};
+  }
+}
