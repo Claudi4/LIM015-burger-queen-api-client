@@ -41,7 +41,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
 
   const onSubmit = (products) => {
     const data = {
-      //image: products.image,
+      image: products.image,
       name: products.name,
       type: products.type,
       price: products.price,
@@ -51,10 +51,11 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
         // TODO: Agregar modal se agrego producto
         // setError(null);
         console.log("se agrego PRODUCTO");
-        const { _id, name, type, price } = response;
+        const { _id, image, name, type, price, } = response;
         //const { image, name, type, price } = response;
         const newProducts = {
           _id,
+          image,
           name,
           type,
           price,
@@ -94,7 +95,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
             margin="normal"
             fullWidth
             id="name"
-            label="name"
+            label="Nombre producto"
             name="name"
             autoComplete="name"
             autoFocus
@@ -103,7 +104,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
         rules={{
           required: "Products required",
           pattern: {
-            value: /^[A-Z]+$/i,
+            value: /^[A-Za-z\s]+$/+/^[0-9.]+$/,
             message: "Debes ingresar un producto válido",
           },
         }}
@@ -122,7 +123,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
             margin="normal"
             fullWidth
             name="price"
-            label="price"
+            label="Precio"
             type={values ? "text" : "price"}
             id="price"
             autoComplete="current-price"
@@ -136,6 +137,35 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
           },
         }}
       />
+      <Controller
+        name="image"
+        control={control}
+        defaultValue=""
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <TextField
+            variant="outlined"
+            value={value}
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+            margin="normal"
+            fullWidth
+            name="image"
+            label="Imagen"
+            type={values ? "text" : "image"}
+            id="image"
+            autoComplete="current-image"
+          />
+        )}
+        rules={{
+          required: "Imagen requerida",
+          pattern: {
+            value: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "Debes ingresar la imagen",
+          },
+        }}
+      />
+      
       <Controller
         name="type"
         control={control}
@@ -220,9 +250,10 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
   const updateProdutds = (event) => {
     console.log(event);
     const newData = {};
+    console.log('event.image', event.image);
     if (data.name !== event.producto) newData.name = event.producto;
-    if (data.price !== event.precio && event.precio !== "")
-      newData.price = event.precio;
+    if (data.price !== event.precio && event.precio !== "") newData.price = event.precio;
+    if (data.image !== event.image && event.image !== "") newData.image = event.image;
     if (event.type !== "") newData.type = event.type;
     /*if (event.type !== 'select') newData.type = {
             type: event.type,
@@ -284,7 +315,7 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
           rules={{
             required: "Products required",
             pattern: {
-              value: /^[A-Z]+$/i,
+              value: /^[A-Za-z\s]+$/+/^[0-9.]+$/,
               message: "Debes ingresar un producto válido",
             },
           }}
@@ -317,9 +348,38 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
           }}
         />
         <Controller
+          name="image"
+          control={control}
+          defaultValue={data.image.toString()}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              variant="outlined"
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error ? error.message : null}
+              type="text"
+              margin="normal"
+              fullWidth
+              id="image"
+              label="image"
+              name="image"
+              autoComplete="image"
+              autoFocus
+            />
+          )}
+          rules={{
+            required: "Images required",
+            pattern: {
+              value: !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Debes ingresar un imagen válida",
+            },
+          }}
+        />
+        <Controller
           name="type"
           control={control}
-          defaultValue="Desayuno"
+          defaultValue={data.type}
           render={({ field: { onChange, value } }) => (
             <FormControl fullWidth sx={{ marginTop: 2 }}>
               <InputLabel id="type">Categoria</InputLabel>
