@@ -12,6 +12,8 @@ import {
   Typography,
   InputLabel,
   Select,
+  Grid,
+  Container,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { postData } from "../helpers/post";
@@ -65,6 +67,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
           body: [newProducts, ...table.body],
         });
         handleClose();
+        //agregar funcion para modal de agrgado exitoso
       } else {
         // setError(response);
         console.log(response);
@@ -104,7 +107,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
         rules={{
           required: "Products required",
           pattern: {
-            value: /^[A-Za-z\s]+$/+/^[0-9.]+$/,
+            value: /^[A-Za-z\s]+$/ + /^[0-9.]+$/,
             message: "Debes ingresar un producto válido",
           },
         }}
@@ -165,7 +168,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
           },
         }}
       />
-      
+
       <Controller
         name="type"
         control={control}
@@ -248,7 +251,6 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
   const [loading, setLoading] = React.useState(false);
 
   const updateProdutds = (event) => {
-    console.log(event);
     const newData = {};
     console.log('event.image', event.image);
     if (data.name !== event.producto) newData.name = event.producto;
@@ -259,7 +261,6 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
             type: event.type,
             desayuno: event.type === 'desayuno',
         }*/
-    console.log(newData);
     setLoading(true);
     updateData("products", data._id, newData).then((response) => {
       if (!response.err) {
@@ -281,10 +282,16 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
       setLoading(false);
       handleClose();
     });
+    handleOpen2();
   };
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen2 = () => setOpen(true);
+  const handleClose2 = () => setOpen(true);
+
   return (
-    <Box>
+    <div>
+      <Box>
       <Box
         id="modal-description"
         component="form"
@@ -315,7 +322,7 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
           rules={{
             required: "Products required",
             pattern: {
-              value: /^[A-Za-z\s]+$/+/^[0-9.]+$/,
+              value: /^[A-Za-z\s]+$/ + /^[0-9.]+$/,
               message: "Debes ingresar un producto válido",
             },
           }}
@@ -413,7 +420,26 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
           </Button>
         </ButtonGroup>
       </Box>
-    </Box>
+      </Box>
+      <Box>
+        <Modal
+          open={open}
+          onClose={handleClose2}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {/* mostarmos la data almacenada en el servicio */}
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              actualizar producto
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              el producto ha sido actualizado
+            </Typography>
+          </Box>
+        </Modal>
+      </Box>
+    </div>
   );
 };
 
@@ -469,4 +495,32 @@ export default function BasicModal({
       </Fade>
     </Modal>
   );
+}
+
+export function BasicModalSucces({ modal, setModal, title, message }) {
+  const handleClose = () => setModal(false);
+  return (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={modal}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 5000,
+      }}
+    >
+      <Fade in={modal}>
+        <Box sx={style}>
+          <Typography id="transition-modal-title" variant="h6" component="h2">
+            {title}
+          </Typography>
+          <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+            {message}
+          </Typography>
+        </Box>
+      </Fade>
+    </Modal>
+  )
 }
