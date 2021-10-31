@@ -17,10 +17,12 @@ function ccyFormat(num) {
 }
 
 function subtotal(items) {
-  return items.map(({ totalPrice }) => totalPrice).reduce((sum, i) => sum + i, 0);
+  return items
+    .map(({ totalPrice }) => totalPrice)
+    .reduce((sum, i) => sum + i, 0);
 }
 
-export default function SpanningTable({products, deleteProduct}) {
+export default function SpanningTable({ products, deleteProduct }) {
   const invoiceSubtotal = subtotal(products);
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
@@ -32,7 +34,9 @@ export default function SpanningTable({products, deleteProduct}) {
             <TableCell align="center" colSpan={3}>
               Detalle
             </TableCell>
-            <TableCell align="center" colSpan={2}>Precio</TableCell>
+            <TableCell align="center" colSpan={2}>
+              Precio
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Producto</TableCell>
@@ -45,19 +49,17 @@ export default function SpanningTable({products, deleteProduct}) {
           {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell>{product.name}</TableCell>
+              <TableCell align="right">{product.quantity}</TableCell>
+              <TableCell align="right">{ccyFormat(product.price)}</TableCell>
               <TableCell align="right">
-                {product.quantity}
+                {ccyFormat(product.totalPrice)}
               </TableCell>
               <TableCell align="right">
-                {ccyFormat(product.price)}
-              </TableCell>
-              <TableCell align="right">{ccyFormat(product.totalPrice)}</TableCell>
-              <TableCell align="right">
-                <IconButton onClick={()=>deleteProduct(product.id)}>
-                  <DeleteIcon color="secondary"/>
+                <IconButton onClick={() => deleteProduct(product.id)}>
+                  <DeleteIcon color="secondary" />
                 </IconButton>
-                <IconButton onClick={()=>deleteProduct(product.id, true)}>
-                  <ClearAllIcon color="secondary"/>
+                <IconButton onClick={() => deleteProduct(product.id, true)}>
+                  <ClearAllIcon color="secondary" />
                 </IconButton>
               </TableCell>
             </TableRow>
@@ -69,7 +71,9 @@ export default function SpanningTable({products, deleteProduct}) {
           </TableRow>
           <TableRow>
             <TableCell>IGV</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
+              0
+            )} %`}</TableCell>
             <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
           </TableRow>
           <TableRow>

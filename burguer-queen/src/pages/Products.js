@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import Table from "../components/ProductsTable";
-import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ProdutctsForms from "../components/ProductsForms";
-import Modal from "../components/Modal";
-import { getData } from "../helpers/get";
+import React, { useState, useEffect } from 'react';
+import { Box, IconButton } from '@mui/material';
+import Table from '../components/ProductsTable';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ProdutctsForms from '../components/ProductsForms';
+import Modal from '../components/Feedback/Modal';
+import Snackbars from '../components/Feedback/Snackbar';
+import { getData } from '../helpers/get';
+import useSnackbar from '../services/Feedback/useSnackbar';
 
 const Products = () => {
+  const { open, close, message, openSnackbar, setMessage } = useSnackbar();
   const [table, setTable] = useState(null);
   const [modal, setModal] = useState(false);
   const [modalError, setModalError] = useState(false);
@@ -16,18 +18,18 @@ const Products = () => {
 
   useEffect(() => {
     let cancel = false;
-    getData("products?limit=1000").then((response) => {
+    getData('products?limit=1000').then((response) => {
       if (cancel) return;
       if (!response.err) {
         setTable({
           header: [
-            "Id",
-            "Imagen",
-            "Producto",
-            "Categoria",
-            "Precio",
-            "Editar",
-            "Borrar",
+            'Id',
+            'Imagen',
+            'Producto',
+            'Categoria',
+            'Precio',
+            'Editar',
+            'Borrar',
           ],
           body: response.map((products) => ({
             ...products,
@@ -37,7 +39,7 @@ const Products = () => {
         setError(null);
       } else {
         setError({
-          title: "Error",
+          title: 'Error',
           message: response.message,
         });
         setModalError(true);
@@ -50,16 +52,16 @@ const Products = () => {
 
   const addProducts = () => {
     setActionForm({
-      title: "Agregar Producto",
-      nameForm: "add",
+      title: 'Agregar Producto',
+      nameForm: 'add',
     });
     setModal(true);
   };
 
   const deleteProduct = (products) => {
     setActionForm({
-      title: "¿Seguro que desea borrar producto?",
-      nameForm: "delete",
+      title: '¿Seguro que desea borrar producto?',
+      nameForm: 'delete',
       data: products,
     });
     setModal(true);
@@ -67,8 +69,8 @@ const Products = () => {
 
   const updateProduct = (products) => {
     setActionForm({
-      title: "Actualizar producto",
-      nameForm: "update",
+      title: 'Actualizar producto',
+      nameForm: 'update',
       data: products,
     });
     setModal(true);
@@ -78,9 +80,9 @@ const Products = () => {
     <Box>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <h1>Productos</h1>
@@ -99,6 +101,8 @@ const Products = () => {
         actionForm={actionForm}
         table={table}
         setTable={setTable}
+        openSnackbar={openSnackbar}
+        setMessage={setMessage}
       />
       <Modal
         modal={modalError}
@@ -106,6 +110,7 @@ const Products = () => {
         title={error?.title}
         message={error?.message}
       />
+      <Snackbars open={open} close={close} message={message} />
     </Box>
   );
 };

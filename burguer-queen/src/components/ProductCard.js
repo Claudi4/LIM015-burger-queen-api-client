@@ -1,24 +1,26 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-// import sinImagen from '../assets/images/sinImagen.webp';
+import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-export default function ProductCard({product, addProduct}) {
+export default function ProductCard({ product, addProduct }) {
   const { id, name, price, image } = product;
   return (
-    <Card sx={{ display: 'flex' }} onClick={() => addProduct(id)}>
+    <Card
+      sx={{ display: 'flex', cursor: 'pointer' }}
+      onClick={() => addProduct(id)}
+    >
       <CardMedia
         component="img"
-        sx={{ width: "58px" }}
-        image={(image || "../images/sinImagen.webp")}
+        sx={{ width: '58px' }}
+        image={image || '../images/sinImagen.webp'}
         alt={name}
       />
       <Box sx={{ display: 'flex' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
-          <Typography component="div" variant="body2" sx={{ fontWeight: '300' }}>
+          <Typography
+            component="div"
+            variant="body2"
+            sx={{ fontWeight: '300' }}
+          >
             {name}
             <br />
             S/.{price}
