@@ -1,13 +1,12 @@
-import React from "react";
-import { Box, Grid, CssBaseline, Button, Typography } from "@mui/material";
-//import notfound2 from "../assets/img/notfound2.png";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { Box, Grid, CssBaseline, Button, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 const NotFound = () => {
   let history = useHistory();
 
   function goLogin() {
-    history.push("/login");
+    history.push('/login');
   }
   return (
     <Grid textAlign="center" sx={{ mt: 2 }}>
@@ -17,10 +16,10 @@ const NotFound = () => {
       </Typography>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "80vh",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '80vh',
         }}
       >
         <Grid>
@@ -38,8 +37,8 @@ const NotFound = () => {
           sx={{
             py: 0,
             px: 4,
-            m: "auto",
-            maxWidth: "300px",
+            m: 'auto',
+            maxWidth: '300px',
           }}
         >
           <Button

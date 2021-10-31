@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import Table from "../components/UsersTable";
-import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import UsersForms from "../components/UsersForms";
-import Modal from "../components/Modal";
-import { getData } from "../helpers/get";
+import React, { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
+import Table from '../components/UsersTable';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import UsersForms from '../components/UsersForms';
+import Modal from '../components/Feedback/Modal';
+import { getData } from '../helpers/get';
+import Snackbars from '../components/Feedback/Snackbar';
+import useSnackbar from '../services/Feedback/useSnackbar';
 
 const Colaborators = () => {
+  const { open, close, message, openSnackbar, setMessage } = useSnackbar();
   const [table, setTable] = useState(null);
   const [modal, setModal] = useState(false);
   const [modalError, setModalError] = useState(false);
@@ -16,11 +19,11 @@ const Colaborators = () => {
 
   useEffect(() => {
     let cancel = false;
-    getData("users?limit=1000").then((response) => {
+    getData('users?limit=1000').then((response) => {
       if (cancel) return;
       if (!response.err) {
         setTable({
-          header: ["Id", "Correo electrónico", "Rol", "Editar", "Borrar"],
+          header: ['Id', 'Correo electrónico', 'Rol', 'Editar', 'Borrar'],
           body: response.map((user) => ({
             ...user,
             roles: user.roles.rol,
@@ -29,7 +32,7 @@ const Colaborators = () => {
         setError(null);
       } else {
         setError({
-          title: "Error",
+          title: 'Error',
           message: response.message,
         });
         setModalError(true);
@@ -42,41 +45,37 @@ const Colaborators = () => {
 
   const addUser = () => {
     setActionForm({
-      title: "Agregar usuario",
-      nameForm: "add",
+      title: 'Agregar usuario',
+      nameForm: 'add',
     });
     setModal(true);
   };
 
   const deleteUser = (email) => {
     setActionForm({
-      title: "¿Seguro que desea borrar usuario?",
-      nameForm: "delete",
+      title: '¿Seguro que desea borrar usuario?',
+      nameForm: 'delete',
       data: email,
     });
     setModal(true);
-    // setError({ title: 'delete', message: email });
-    // setModalError(true);
   };
 
   const updateUser = (user) => {
     setActionForm({
-      title: "Actualizar usuario",
-      nameForm: "update",
+      title: 'Actualizar usuario',
+      nameForm: 'update',
       data: user,
     });
     setModal(true);
-    // setModalError(true);
-    // setError({ title: 'update', message: email });
   };
 
   return (
     <Box>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <h1>Colaboradores</h1>
@@ -91,6 +90,8 @@ const Colaborators = () => {
         actionForm={actionForm}
         table={table}
         setTable={setTable}
+        openSnackbar={openSnackbar}
+        setMessage={setMessage}
       />
       <Modal
         modal={modalError}
@@ -98,6 +99,7 @@ const Colaborators = () => {
         title={error?.title}
         message={error?.message}
       />
+      <Snackbars open={open} close={close} message={message} />
     </Box>
   );
 };

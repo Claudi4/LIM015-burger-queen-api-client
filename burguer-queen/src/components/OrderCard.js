@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Box,
   Typography,
@@ -11,10 +11,10 @@ import {
   TableRow,
   TableCell,
   Chip,
-} from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import TimerIcon from "@mui/icons-material/Timer";
-import getTime from "../helpers/date";
+  CardContent,
+} from '@mui/material';
+import TimerIcon from '@mui/icons-material/Timer';
+import getTime from '../helpers/date';
 
 export default function OrderCard({ order, action }) {
   const { _id, client, products, status, dateEntry, dateProcessed } = order;
@@ -25,57 +25,40 @@ export default function OrderCard({ order, action }) {
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
   const time = getTime(dateProcessed, dateEntry);
-  let color = "info";
-  switch (status) {
-    case "pendiente" || "preparando":
-      color = "warning";
-      break;
-    case "listo":
-      color = "info";
-      break;
-    case "entregado":
-      color = "success";
-      break;
-    case "cancelado":
-      color = "error";
-      break;
-    default:
-      color = "info";
-      break;
-  }
 
-  const styled = {
-    marginRight: '10px'
-  };
   return (
-    <Card sx={{ display: "flex" }}>
-      <CardContent sx={{ flex: "1 0 auto" }}>
+    <Card sx={{ display: 'flex' }}>
+      <CardContent sx={{ flex: '1 0 auto' }}>
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "end",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'end',
             my: 1,
           }}
         >
           <TimerIcon color={time.color} />
-          <Typography color={time.color}>{time.message}</Typography>
+          <Typography
+            sx={{ ml: '2px', fontSize: '0.875rem', fontWeight: 400 }}
+            color={time.color}
+          >
+            {time.message}
+          </Typography>
         </Box>
-        <Box>
-          <Typography variant="p" >
-            <b>Pedido:</b> {_id} <br />
-            <b>Cliente:</b> {client} <br />
-            <b style={styled}>Estado:</b>
+        <Box sx={{ lineHeight: 1.8, fontSize: '0.875rem', fontWeight: 400 }}>
+          <b>Pedido:</b> {_id} <br />
+          <b>Cliente:</b> {client}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <b>Estado:</b>
             <Chip
+              sx={{ marginLeft: 1 }}
               variant="outlined"
-              color={color}
+              color={action.statusColor}
               size="small"
               label={status}
-
             />
-            <br />
-            <b>Total a pagar:</b> S/.{total.toFixed(2)}
-          </Typography>
+          </Box>
+          <b>Total a pagar:</b> S/.{total.toFixed(2)}
         </Box>
         <Table size="small">
           <TableHead>
@@ -88,7 +71,7 @@ export default function OrderCard({ order, action }) {
             {products?.map((item) => (
               <TableRow key={item.product?._id ?? 0}>
                 <TableCell>
-                  {item.product?.name ?? "Producto Borrado"}
+                  {item.product?.name ?? 'Producto Borrado'}
                 </TableCell>
                 <TableCell align="center">{item.qty}</TableCell>
               </TableRow>
@@ -104,20 +87,20 @@ export default function OrderCard({ order, action }) {
           <Button
             sx={{
               opacity: 0.7,
-              backgroundColor: "#696969",
-              "&:hover": {
-                backgroundColor: "#696969",
+              backgroundColor: '#696969',
+              '&:hover': {
+                backgroundColor: '#696969',
                 opacity: 0.5,
               },
             }}
-          // onClick={handleClose}
+            // onClick={handleClose}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
             color={action.color}
-          // disabled={loading}
+            // disabled={loading}
           >
             {action.name}
           </Button>
