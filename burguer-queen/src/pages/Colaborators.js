@@ -51,11 +51,12 @@ const Colaborators = () => {
     setModal(true);
   };
 
-  const deleteUser = (email) => {
+  const deleteUser = (email, page, setPage, rowsPerPage) => {
     setActionForm({
       title: '¿Seguro que desea borrar usuario?',
       nameForm: 'delete',
       data: email,
+      pagination: { page, setPage, rowsPerPage },
     });
     setModal(true);
   };

@@ -176,6 +176,7 @@ const AddProductsForm = ({
 
 const DeleteProductsForm = ({
   data,
+  pagination,
   table,
   setTable,
   handleClose,
@@ -187,6 +188,7 @@ const DeleteProductsForm = ({
     setLoading(true);
     deleteDataById('products', data).then((response) => {
       if (!response.err) {
+        if ((table.body.length - 1) % pagination.rowsPerPage === 0) pagination.setPage(pagination.page === 0 ? 0 : pagination.page - 1);
         setTable({
           ...table,
           body: table.body.filter((item) => item._id !== data),
@@ -412,6 +414,7 @@ export default function BasicModal({
           {actionForm?.nameForm === 'delete' && (
             <DeleteProductsForm
               data={actionForm?.data}
+              pagination={actionForm?.pagination}
               handleClose={handleClose}
               table={table}
               setTable={setTable}

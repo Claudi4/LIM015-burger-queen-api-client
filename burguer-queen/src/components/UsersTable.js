@@ -15,7 +15,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
-export default function BasicTable({ table, deleteUser, updateUser }) {
+export default function UsersTable({ table, deleteUser, updateUser }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -74,7 +74,7 @@ export default function BasicTable({ table, deleteUser, updateUser }) {
                   </IconButton>
                 </TableCell>
                 <TableCell size="small" align="center">
-                  <IconButton aria-label="delete product" onClick={() => deleteUser(user.email)}>
+                  <IconButton aria-label="delete product" onClick={() => deleteUser(user.email, page, setPage, rowsPerPage)}>
                     <DeleteIcon color="secondary" />
                   </IconButton>
                 </TableCell>

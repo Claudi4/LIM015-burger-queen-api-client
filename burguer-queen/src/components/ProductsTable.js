@@ -1,19 +1,21 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
-import TableFooter from '@mui/material/TableFooter';
+import {
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableFooter,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
-export default function BasicTable({ table, updateProduct, deleteProduct }) {
+export default function ProductsTable({ table, updateProduct, deleteProduct }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -67,12 +69,20 @@ export default function BasicTable({ table, updateProduct, deleteProduct }) {
                 <TableCell align="center">{product.type}</TableCell>
                 <TableCell align="center">{product.price}</TableCell>
                 <TableCell size="small" align="center">
-                  <IconButton aria-label="update product" onClick={() => updateProduct(product)}>
+                  <IconButton
+                    aria-label="update product"
+                    onClick={() => updateProduct(product)}
+                  >
                     <CreateIcon color="secondary" />
                   </IconButton>
                 </TableCell>
                 <TableCell size="small" align="center">
-                  <IconButton aria-label="delete product" onClick={() => deleteProduct(product._id)}>
+                  <IconButton
+                    aria-label="delete product"
+                    onClick={() =>
+                      deleteProduct(product._id, page, setPage, rowsPerPage)
+                    }
+                  >
                     <DeleteIcon color="secondary" />
                   </IconButton>
                 </TableCell>

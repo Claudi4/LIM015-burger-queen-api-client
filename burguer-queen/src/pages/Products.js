@@ -58,11 +58,12 @@ const Products = () => {
     setModal(true);
   };
 
-  const deleteProduct = (products) => {
+  const deleteProduct = (products, page, setPage, rowsPerPage) => {
     setActionForm({
       title: '¿Seguro que desea borrar producto?',
       nameForm: 'delete',
       data: products,
+      pagination: { page, setPage, rowsPerPage },
     });
     setModal(true);
   };
