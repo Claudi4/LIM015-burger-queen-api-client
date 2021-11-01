@@ -5,8 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import UsersForms from '../components/UsersForms';
 import Modal from '../components/Feedback/Modal';
-import { getData } from '../helpers/get';
 import Snackbars from '../components/Feedback/Snackbar';
+import { getData } from '../helpers/get';
 import useSnackbar from '../services/Feedback/useSnackbar';
 
 const Colaborators = () => {
@@ -79,7 +79,7 @@ const Colaborators = () => {
         }}
       >
         <h1>Colaboradores</h1>
-        <IconButton onClick={addUser}>
+        <IconButton aria-label="add user" onClick={addUser}>
           <AddCircleIcon color="success" />
         </IconButton>
       </Box>

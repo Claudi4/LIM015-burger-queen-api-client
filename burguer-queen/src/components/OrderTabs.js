@@ -36,6 +36,8 @@ export default function BasicTabs({ openSnackbar, setMessage }) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
+          textColor="secondary"
+          indicatorColor="secondary"
           value={value}
           onChange={handleChange}
           variant="scrollable"

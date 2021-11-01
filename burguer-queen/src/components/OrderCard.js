@@ -80,30 +80,41 @@ export default function OrderCard({ order, action, updateOrder }) {
         </Table>
         <ButtonGroup
           fullWidth
-          sx={{ marginTop: 1 }}
+          sx={{
+            marginTop: 1,
+            '& .MuiButtonGroup-grouped:not(:last-of-type)': {
+              borderRight: 0,
+            },
+          }}
           disableElevation
           variant="contained"
         >
-          {action.name !== 'Pedir' && <Button
-            sx={{
-              opacity: 0.7,
-              backgroundColor: '#696969',
-              '&:hover': {
-                backgroundColor: '#696969',
-                opacity: 0.5,
-              },
-            }}
-            onClick={() => updateOrder(_id, 'cancelado')}
-          >
-            Cancelar
-          </Button>}
-          {action.name !== '' && <Button
-            variant="contained"
-            color={action.color}
-            onClick={() => updateOrder(_id, action.nextStatus)}
-          >
-            {action.name}
-          </Button>}
+          {action.name !== 'Pedir' && (
+            <Button
+              sx={{
+                opacity: 0.9,
+                color: '#fff',
+                backgroundColor: '#515862',
+                border: '0',
+                '&:hover': {
+                  backgroundColor: '#696969',
+                  opacity: 0.7,
+                },
+              }}
+              onClick={() => updateOrder(_id, 'cancelado')}
+            >
+              Cancelar
+            </Button>
+          )}
+          {action.name !== '' && (
+            <Button
+              variant="contained"
+              color={action.color}
+              onClick={() => updateOrder(_id, action.nextStatus)}
+            >
+              {action.name}
+            </Button>
+          )}
         </ButtonGroup>
       </CardContent>
     </Card>

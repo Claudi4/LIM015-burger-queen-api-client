@@ -54,10 +54,10 @@ const MainBar = ({open, handleDrawerOpen}) => {
         >
           <MenuIcon />
         </IconButton>
-        <img height="60px" src="../images/Logo.svg" className="logo" alt="Burguer Queen" />
+        <img height="60px" width="130px" src="../images/Logo.svg" className="logo" alt="Burguer Queen" />
         <IconButton
           color="inherit"
-          aria-label="log out"
+          aria-label="logout"
           onClick={LogOut}
         >
           <LogoutIcon />

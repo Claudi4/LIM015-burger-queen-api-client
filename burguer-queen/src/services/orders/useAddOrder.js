@@ -3,6 +3,7 @@ import { TYPES } from "./actions";
 export const shoppingInitialState = {
   products: null,
   cart: [],
+  client: '',
 };
 
 export function shoppingReducer(state, action) {
@@ -67,8 +68,11 @@ export function shoppingReducer(state, action) {
         cart: state.cart.filter((item) => item.id !== action.payload),
       };
     }
+    case TYPES.SET_CLIENT: {
+      return {...state, client: action.client}
+    }
     case TYPES.CLEAR_CART:
-      return { ...state, cart: [] };
+      return { ...state, cart: [], client: '' };
     case TYPES.NO_DATA:
       return { ...state, products: null };
     default:

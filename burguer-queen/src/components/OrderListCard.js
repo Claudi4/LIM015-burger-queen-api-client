@@ -81,7 +81,7 @@ export default function BasicList({ type, openSnackbar, setMessage }) {
     });
   };
   return (
-    <Grid container spacing={{ xs: 2 }} columns={{ sm: 8, md: 12 }}>
+    <Grid container justifyContent="center" spacing={{ xs: 2 }} columns={{ sm: 8, md: 12 }}>
       {orders?.map((order) => (
         <Grid item xs={12} sm={4} md={4} key={order._id}>
           <Card order={order} action={action} updateOrder={updateOrder} />

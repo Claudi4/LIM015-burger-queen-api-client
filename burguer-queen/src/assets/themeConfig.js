@@ -14,7 +14,6 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          // Some CSS
           width: '100%',
           color: '#696969',
           backgroundColor: '#F2F2F2',

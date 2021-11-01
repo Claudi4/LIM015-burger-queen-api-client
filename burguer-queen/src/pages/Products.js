@@ -86,7 +86,7 @@ const Products = () => {
         }}
       >
         <h1>Productos</h1>
-        <IconButton onClick={addProducts}>
+        <IconButton aria-label="add product" onClick={addProducts}>
           <AddCircleIcon color="success" />
         </IconButton>
       </Box>

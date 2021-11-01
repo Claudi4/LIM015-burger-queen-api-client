@@ -69,12 +69,12 @@ export default function BasicTable({ table, deleteUser, updateUser }) {
                 </TableCell>
                 <TableCell>{user.roles}</TableCell>
                 <TableCell size="small" align="center">
-                  <IconButton onClick={() => updateUser(user)}>
+                  <IconButton aria-label="update user" onClick={() => updateUser(user)}>
                     <CreateIcon color="secondary" />
                   </IconButton>
                 </TableCell>
                 <TableCell size="small" align="center">
-                  <IconButton onClick={() => deleteUser(user.email)}>
+                  <IconButton aria-label="delete product" onClick={() => deleteUser(user.email)}>
                     <DeleteIcon color="secondary" />
                   </IconButton>
                 </TableCell>

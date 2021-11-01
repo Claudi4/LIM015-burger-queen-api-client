@@ -1,9 +1,9 @@
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import ProductListCard from "./ProductListCard";
-import Pagination from "./Pagination";
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import ProductListCard from './ProductListCard';
+import Pagination from './Pagination';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -24,11 +24,11 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
-export default function BasicTabs({ products, addProduct}) {
+export default function BasicTabs({ products, addProduct }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -36,9 +36,11 @@ export default function BasicTabs({ products, addProduct}) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
+          textColor="secondary"
+          indicatorColor="secondary"
           value={value}
           onChange={handleChange}
           variant="scrollable"
@@ -50,12 +52,20 @@ export default function BasicTabs({ products, addProduct}) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ProductListCard type="Desayuno" products={products} addProduct={addProduct}/>
-        <Pagination counter={3}/>
+        <ProductListCard
+          type="Desayuno"
+          products={products}
+          addProduct={addProduct}
+        />
+        <Pagination counter={3} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ProductListCard type="Almuerzo y cena" products={products} addProduct={addProduct}/>
-        <Pagination counter={3}/>
+        <ProductListCard
+          type="Almuerzo y cena"
+          products={products}
+          addProduct={addProduct}
+        />
+        <Pagination counter={3} />
       </TabPanel>
     </Box>
   );
