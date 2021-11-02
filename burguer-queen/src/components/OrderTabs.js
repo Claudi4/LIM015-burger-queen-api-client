@@ -1,8 +1,6 @@
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import OrderListCard from "./OrderListCard";
+import * as React from 'react';
+import { Box, Tabs, Tab } from '@mui/material';
+import OrderListCard from './OrderListCard';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -15,7 +13,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ pt: 2}}>{children}</Box>}
+      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -23,11 +21,11 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
-export default function BasicTabs({ orders, updateOrder }) {
+export default function BasicTabs({ openSnackbar, setMessage }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -35,8 +33,8 @@ export default function BasicTabs({ orders, updateOrder }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -54,36 +52,36 @@ export default function BasicTabs({ orders, updateOrder }) {
       <TabPanel value={value} index={0}>
         <OrderListCard
           type="pendiente"
-          orders={orders}
-          updateOrder={updateOrder}
+          openSnackbar={openSnackbar}
+          setMessage={setMessage}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <OrderListCard
           type="preparando"
-          orders={orders}
-          updateOrder={updateOrder}
+          openSnackbar={openSnackbar}
+          setMessage={setMessage}
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <OrderListCard
           type="listo"
-          orders={orders}
-          updateOrder={updateOrder}
+          openSnackbar={openSnackbar}
+          setMessage={setMessage}
         />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <OrderListCard
           type="entregado"
-          orders={orders}
-          updateOrder={updateOrder}
+          openSnackbar={openSnackbar}
+          setMessage={setMessage}
         />
       </TabPanel>
       <TabPanel value={value} index={4}>
         <OrderListCard
           type="cancelado"
-          orders={orders}
-          updateOrder={updateOrder}
+          openSnackbar={openSnackbar}
+          setMessage={setMessage}
         />
       </TabPanel>
     </Box>
