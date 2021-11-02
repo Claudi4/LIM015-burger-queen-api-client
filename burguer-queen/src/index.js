@@ -5,7 +5,6 @@ import App from './App';
 import theme from './assets/themeConfig.js';
 import { ThemeProvider } from '@mui/material/styles';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
