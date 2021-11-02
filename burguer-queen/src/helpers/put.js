@@ -20,8 +20,6 @@ export const updateData = async (path, id, data) => {
 }
 
 export const updateOrders = async (path, id, status) => {
-  console.log('idOrder',id);
-  console.log('statusOrder',status);
   try {
     const userAuth = JSON.parse(sessionStorage.getItem("user"));
     let options = {
