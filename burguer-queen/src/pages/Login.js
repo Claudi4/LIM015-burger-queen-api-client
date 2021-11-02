@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Paper,
@@ -7,39 +7,37 @@ import {
   Button,
   CssBaseline,
   InputAdornment,
-} from "@mui/material";
-// import fondo from "../assets/img/fondo4.png";
-// import logo from "../assets/img/Logo.svg";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import useAuth from "../services/auth/useAuth";
-import IconButton from "@mui/material/IconButton";
-import { useForm, Controller } from "react-hook-form";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
+} from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import useAuth from '../services/auth/useAuth';
+import IconButton from '@mui/material/IconButton';
+import { useForm, Controller } from 'react-hook-form';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-let errorMessage = "";
+let errorMessage = '';
 
 const Login = () => {
   const { handleSubmit, control } = useForm();
   const auth = useAuth();
 
   const [values, setValues] = React.useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     showPassword: false,
   });
 
@@ -56,8 +54,8 @@ const Login = () => {
     user.then((response) => {
       if (response.err) {
         errorMessage =
-          response.message === "Not found"
-            ? "El usuario no existe."
+          response.message === 'Not found'
+            ? 'El usuario no existe.'
             : response.message;
         handleOpen();
       }
@@ -69,37 +67,52 @@ const Login = () => {
   const handleClose = () => setOpen(false);
   return (
     <div>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
           item
-          xs={false}
           sm={4}
           md={7}
           sx={{
+            display: { xs: 'none', sm: 'block' },
             background: `url(images/background.webp) no-repeat center center`,
-            backgroundSize: "cover",
+            backgroundSize: 'cover',
           }}
           alt="brand"
         />
-        <Grid textAlign="center" item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          textAlign="center"
+          item
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+        >
           <Box
             sx={{
               py: 8,
               px: 4,
-              m: "auto",
-              height: "100vh",
-              maxWidth: "600px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
+              m: 'auto',
+              height: '100vh',
+              maxWidth: '600px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
             component="form"
             noValidate
             onSubmit={handleSubmit(onSubmit)}
           >
-            <img src="./images/redLogo.svg" width="200px" height="90px" style={{ m: "1rem" }} alt="logo" />
+            <img
+              src="./images/redLogo.svg"
+              width="200px"
+              height="90px"
+              style={{ m: '1rem' }}
+              alt="logo"
+            />
             <Controller
               name="email"
               control={control}
@@ -134,11 +147,11 @@ const Login = () => {
                 />
               )}
               rules={{
-                required: "Email required",
+                required: 'Email required',
                 pattern: {
                   value:
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: "Debes usar un email válido",
+                  message: 'Debes usar un email válido',
                 },
               }}
             />
@@ -160,7 +173,7 @@ const Login = () => {
                   fullWidth
                   name="password"
                   label="Contraseña"
-                  type={values.showPassword ? "text" : "password"}
+                  type={values.showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="current-password"
                   InputProps={{
@@ -183,21 +196,21 @@ const Login = () => {
                 />
               )}
               rules={{
-                required: "Contraseña requerida",
+                required: 'Contraseña requerida',
                 minLength: {
                   value: 8,
-                  message: "Contraseña debe tener al menos 8 caracteres",
+                  message: 'Contraseña debe tener al menos 8 caracteres',
                 },
                 pattern: {
                   value:
                     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
                   message:
-                    "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter eapecial",
+                    'Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter eapecial',
                 },
                 validate: {
                   equals: (password) =>
-                    password !== "password123#" ||
-                    "Escoge una contraseña mas segura",
+                    password !== 'password123#' ||
+                    'Escoge una contraseña mas segura',
                 },
               }}
             />

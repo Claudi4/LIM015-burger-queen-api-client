@@ -1,30 +1,35 @@
-import React, { useReducer, useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
-import SpanningTable from "../components/SpanningTable";
-import Tabs from "../components/Tabs";
-import useAuth from "../services/auth/useAuth";
+import React, { useReducer, useEffect, useState } from 'react';
+import {
+  Grid,
+  TextField,
+  Typography,
+  ButtonGroup,
+  Button,
+} from '@mui/material';
+import SpanningTable from '../components/SpanningTable';
+import Snackbars from '../components/Feedback/Snackbar';
+import Tabs from '../components/Tabs';
+import useAuth from '../services/auth/useAuth';
 import {
   shoppingInitialState,
   shoppingReducer,
-} from "../services/orders/useAddOrder";
-import { TYPES } from "../services/orders/actions";
-import { getData } from "../helpers/get";
-import { postData } from "../helpers/post";
+} from '../services/orders/useAddOrder';
+import { TYPES } from '../services/orders/actions';
+import { getData } from '../helpers/get';
+import { postData } from '../helpers/post';
+import useSnackbar from '../services/Feedback/useSnackbar';
 
 export default function AddOrder() {
   const auth = useAuth();
+  const { open, close, message, openSnackbar, setMessage } = useSnackbar();
   const [state, dispatch] = useReducer(shoppingReducer, shoppingInitialState);
   const { products, cart } = state;
-  const [client, setClient] = useState("");
+  const [client, setClient] = useState('');
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     // setLoading(true);
     let cancel = false;
-    getData("products?limit=1000").then((response) => {
+    getData('products?limit=1000').then((response) => {
       if (cancel) return;
       if (!response.err) {
         dispatch({ type: TYPES.READ_PRODUCTS, payload: response });
@@ -69,14 +74,15 @@ export default function AddOrder() {
         qty: product.quantity,
         productId: product.id,
       }));
-      postData("orders", data).then((response) => {
+      postData('orders', data).then((response) => {
         if (!response.err) {
-          // TODO: Agregar modal o snackbar se agrego producto
+          setMessage({ color: 'success', text: 'Se envio pedido a cocina' });
+          openSnackbar();
           clearCart();
-          // setError(null);
+          setClient('');
         } else {
-          // setError(response);
-          console.log(response);
+          setMessage({ color: 'error', text: response.message });
+          openSnackbar();
         }
         setLoading(false);
       });
@@ -114,7 +120,7 @@ export default function AddOrder() {
           variant="contained"
         >
           <Button
-            sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+            sx={{ opacity: 0.7, backgroundColor: '#696969' }}
             onClick={clearCart}
           >
             Cancelar
@@ -124,6 +130,7 @@ export default function AddOrder() {
           </Button>
         </ButtonGroup>
       </Grid>
+      <Snackbars open={open} close={close} message={message} />
     </Grid>
   );
 }

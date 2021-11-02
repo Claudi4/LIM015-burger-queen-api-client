@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Grid, Typography } from "@mui/material";
-import Card from "./OrderCard";
-import { getData } from "../helpers/get";
+import React, { useState, useEffect } from 'react';
+import { Grid, Typography } from '@mui/material';
+import Card from './OrderCard';
+import { getData } from '../helpers/get';
 
 export default function BasicList({ type, updateOrder }) {
-  let action = { color: "primary", name: "Enviar" };
+  let action;
   switch (type) {
-    case "pendiente":
-      action = { color: "warning", name: "Preparar" };
+    case 'pendiente':
+      action = { statusColor: 'warning', color: 'warning', name: 'Preparar' };
       break;
-    case "cancelado":
-      action = { color: "info", name: "Pedir" };
+    case 'preparando':
+      action = { statusColor: 'warning', color: 'info', name: 'Listo' };
       break;
-    case "entregado":
-      action = { color: "info", name: "" };
+    case 'listo':
+      action = { statusColor: 'info', color: 'success', name: 'Entregar' };
       break;
-    case "preparando":
-      action = { color: "info", name: "Listo" };
+    case 'entregado':
+      action = { statusColor: 'success', color: 'info', name: '' };
       break;
-    case "listo":
-      action = { color: "success", name: "Entregar" };
+    case 'cancelado':
+      action = { statusColor: 'error', color: 'info', name: 'Pedir' };
       break;
     default:
+      action = { statusColor: 'info', color: 'info', name: '' };
       break;
   }
   const [orders, setOrders] = useState();
@@ -31,10 +32,12 @@ export default function BasicList({ type, updateOrder }) {
       if (cancel) return;
       setOrders(response);
     });
-    return () => { cancel = true }
+    return () => {
+      cancel = true;
+    };
   }, [type]);
   return (
-    <Grid container spacing={{ xs: 2 }} columns={{ sm: 8, md: 12}}>
+    <Grid container spacing={{ xs: 2 }} columns={{ sm: 8, md: 12 }}>
       {orders?.map((order) => (
         <Grid item xs={12} sm={4} md={4} key={order._id}>
           <Card order={order} action={action} updateOrder={updateOrder} />

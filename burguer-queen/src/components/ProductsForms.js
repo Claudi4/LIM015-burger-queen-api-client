@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Fade,
   Backdrop,
@@ -12,33 +12,37 @@ import {
   Typography,
   InputLabel,
   Select,
-  Grid,
-  Container,
-} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { postData } from "../helpers/post";
-import { deleteDataById } from "../helpers/delete";
-import { updateData } from "../helpers/put";
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { postData } from '../helpers/post';
+import { deleteDataById } from '../helpers/delete';
+import { updateData } from '../helpers/put';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-const AddProductsForm = ({ table, setTable, handleClose }) => {
+const AddProductsForm = ({
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const { handleSubmit, control } = useForm();
   const [values] = React.useState({
-    image: "",
-    name: "",
-    type: "",
-    price: "",
+    image: '',
+    name: '',
+    type: '',
+    price: '',
   });
 
   const onSubmit = (products) => {
@@ -48,31 +52,20 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
       type: products.type,
       price: products.price,
     };
-    postData("products", data).then((response) => {
+    postData('products', data).then((response) => {
       if (!response.err) {
-        // TODO: Agregar modal se agrego producto
-        // setError(null);
-        console.log("se agrego PRODUCTO");
-        const { _id, image, name, type, price, } = response;
-        //const { image, name, type, price } = response;
-        const newProducts = {
-          _id,
-          image,
-          name,
-          type,
-          price,
-        };
+        const { _id, image, name, type, price } = response;
         setTable({
           ...table,
-          body: [newProducts, ...table.body],
+          body: [response, ...table.body],
         });
         handleClose();
-        //agregar funcion para modal de agrgado exitoso
+        setMessage({ color: 'success', text: 'Se agrego producto' });
+        openSnackbar();
       } else {
-        // setError(response);
-        console.log(response);
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
       }
-      //setLoading(false);
     });
   };
 
@@ -105,7 +98,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
           />
         )}
         rules={{
-          required: "Products required",
+          required: 'Products required',
           pattern: {
             value: /^[A-Za-z\s]+$/ + /^[0-9.]+$/,
             message: "Debes ingresar un producto válido",
@@ -127,16 +120,16 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
             fullWidth
             name="price"
             label="Precio"
-            type={values ? "text" : "price"}
+            type={values ? 'text' : 'price'}
             id="price"
             autoComplete="current-price"
           />
         )}
         rules={{
-          required: "Precio requerida",
+          required: 'Precio requerida',
           pattern: {
             value: /^[0-9.]+$/,
-            message: "Debes ingresar solo numeros",
+            message: 'Debes ingresar solo numeros',
           },
         }}
       />
@@ -188,7 +181,7 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
             </Select>
           </FormControl>
         )}
-        rules={{ required: "Categoria Requerida" }}
+        rules={{ required: 'Categoria Requerida' }}
       />
       <Button
         type="submit"
@@ -204,18 +197,28 @@ const AddProductsForm = ({ table, setTable, handleClose }) => {
   );
 };
 
-const DeleteProductsForm = ({ data, table, setTable, handleClose }) => {
+const DeleteProductsForm = ({
+  data,
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const [loading, setLoading] = React.useState(false);
   const deleteProduct = () => {
     setLoading(true);
-    deleteDataById("products", data).then((response) => {
+    deleteDataById('products', data).then((response) => {
       if (!response.err) {
         setTable({
           ...table,
           body: table.body.filter((item) => item._id !== data),
         });
+        setMessage({ color: 'success', text: 'Se borró producto' });
+        openSnackbar();
       } else {
-        console.log(response);
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
       }
       setLoading(false);
       handleClose();
@@ -232,7 +235,7 @@ const DeleteProductsForm = ({ data, table, setTable, handleClose }) => {
         variant="contained"
       >
         <Button
-          sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+          sx={{ opacity: 0.7, backgroundColor: '#696969' }}
           onClick={handleClose}
         >
           Cancelar
@@ -245,7 +248,14 @@ const DeleteProductsForm = ({ data, table, setTable, handleClose }) => {
   );
 };
 
-const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
+const UpdateProductsForm = ({
+  data,
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const { handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
 
@@ -256,7 +266,7 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
     if (data.image !== event.image && event.image !== "") newData.image = event.image;
     if (event.type !== "") newData.type = event.type;
     setLoading(true);
-    updateData("products", data._id, newData).then((response) => {
+    updateData('products', data._id, newData).then((response) => {
       if (!response.err) {
         setTable({
           ...table,
@@ -270,8 +280,11 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
             }
           }),
         });
+        setMessage({ color: 'success', text: 'Se actualizo usuario' });
+        openSnackbar();
       } else {
-        console.log(response);
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
       }
       setLoading(false);
       handleClose();
@@ -314,7 +327,7 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
             />
           )}
           rules={{
-            required: "Products required",
+            required: 'Products required',
             pattern: {
               value: /^[A-Za-z\s]+$/ + /^[0-9.]+$/,
               message: "Debes ingresar un producto válido",
@@ -341,10 +354,10 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
             />
           )}
           rules={{
-            required: "Precio requerida",
+            required: 'Precio requerida',
             pattern: {
               value: /^[0-9.]+$/,
-              message: "Debes ingresar solo numeros",
+              message: 'Debes ingresar solo numeros',
             },
           }}
         />
@@ -404,7 +417,7 @@ const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
           variant="contained"
         >
           <Button
-            sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+            sx={{ opacity: 0.7, backgroundColor: '#696969' }}
             onClick={handleClose}
           >
             Cancelar
@@ -443,6 +456,8 @@ export default function BasicModal({
   actionForm,
   table,
   setTable,
+  openSnackbar,
+  setMessage,
 }) {
   const handleClose = () => setModal(false);
   return (
@@ -462,27 +477,33 @@ export default function BasicModal({
           <Typography id="modal-title" variant="h6" component="h2">
             {actionForm?.title}
           </Typography>
-          {actionForm?.nameForm === "add" && (
+          {actionForm?.nameForm === 'add' && (
             <AddProductsForm
               handleClose={handleClose}
               table={table}
               setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
             />
           )}
-          {actionForm?.nameForm === "delete" && (
+          {actionForm?.nameForm === 'delete' && (
             <DeleteProductsForm
               data={actionForm?.data}
               handleClose={handleClose}
               table={table}
               setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
             />
           )}
-          {actionForm?.nameForm === "update" && (
+          {actionForm?.nameForm === 'update' && (
             <UpdateProductsForm
               data={actionForm?.data}
               handleClose={handleClose}
               table={table}
               setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
             />
           )}
         </Box>

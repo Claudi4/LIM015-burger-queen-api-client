@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Fade,
   Backdrop,
@@ -14,34 +14,40 @@ import {
   Typography,
   InputLabel,
   Select,
-} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { postData } from "../helpers/post";
-import { deleteDataById } from "../helpers/delete";
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { postData } from '../helpers/post';
+import { deleteDataById } from '../helpers/delete';
+import { updateData } from '../helpers/put';
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { updateData } from "../helpers/put";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-const AddUserForm = ({ table, setTable, handleClose }) => {
+const AddUserForm = ({
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const { handleSubmit, control } = useForm();
   const [values, setValues] = React.useState({
-    email: "",
-    password: "",
-    rol: "",
+    email: '',
+    password: '',
+    rol: '',
     showPassword: false,
   });
   const handleClickShowPassword = () => {
@@ -58,29 +64,29 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
       password: event.password,
       roles: {
         rol: event.rol,
-        admin: (event.rol === 'admin'),
+        admin: event.rol === 'admin',
       },
-    }
-    postData('users', data)
-      .then((response) => {
-        if (!response.err) {
-          // TODO: Agregar modal se agrego producto
-          // setError(null);
-          const { _id, email, roles } = response;
-          const newUser = {
-            _id, email, roles: roles.rol
-          };
-          setTable({
-            ...table,
-            body: [ newUser, ...table.body]
-          })
-          handleClose();
-        } else {
-          // setError(response);
-          console.log(response)
-        }
-        //setLoading(false);
-      });
+    };
+    postData('users', data).then((response) => {
+      if (!response.err) {
+        const { _id, email, roles } = response;
+        const newUser = {
+          _id,
+          email,
+          roles: roles.rol,
+        };
+        setTable({
+          ...table,
+          body: [newUser, ...table.body],
+        });
+        handleClose();
+        setMessage({ color: 'success', text: 'Se agrego usuario' });
+        openSnackbar();
+      } else {
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
+      }
+    });
   };
 
   return (
@@ -121,11 +127,11 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
           />
         )}
         rules={{
-          required: "Email required",
+          required: 'Email required',
           pattern: {
             value:
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            message: "Debes usar un email válido",
+            message: 'Debes usar un email válido',
           },
         }}
       />
@@ -144,7 +150,7 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
             fullWidth
             name="password"
             label="Contraseña"
-            type={values.showPassword ? "text" : "password"}
+            type={values.showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
             InputProps={{
@@ -166,20 +172,20 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
           />
         )}
         rules={{
-          required: "Contraseña requerida",
+          required: 'Contraseña requerida',
           minLength: {
             value: 8,
-            message: "Contraseña debe tener al menos 8 caracteres",
+            message: 'Contraseña debe tener al menos 8 caracteres',
           },
           pattern: {
             value:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
             message:
-              "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial",
+              'Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial',
           },
           validate: {
             equals: (password) =>
-              password !== "password123#" || "Escoge una contraseña mas segura",
+              password !== 'password123#' || 'Escoge una contraseña mas segura',
           },
         }}
       />
@@ -203,7 +209,7 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
             </Select>
           </FormControl>
         )}
-        rules={{ required: "Rol requerido" }}
+        rules={{ required: 'Rol requerido' }}
       />
       <Button
         type="submit"
@@ -219,59 +225,71 @@ const AddUserForm = ({ table, setTable, handleClose }) => {
   );
 };
 
-const DeleteUserForm = ({data, table, setTable, handleClose}) => {
+const DeleteUserForm = ({
+  data,
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const [loading, setLoading] = React.useState(false);
   const deleteUser = () => {
     setLoading(true);
-    deleteDataById('users', data)
-      .then((response) => {
-        if (!response.err) {
-          setTable({
-            ...table,
-            body: table.body.filter((item) => item.email !== data)
-          });
-        } else {
-          console.log(response)
-        }
-        setLoading(false);
-        handleClose();
-      })
+    deleteDataById('users', data).then((response) => {
+      if (!response.err) {
+        setTable({
+          ...table,
+          body: table.body.filter((item) => item.email !== data),
+        });
+        setMessage({ color: 'success', text: 'Se borró usuario' });
+        openSnackbar();
+      } else {
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
+      }
+      setLoading(false);
+      handleClose();
+    });
   };
 
   return (
     <Box>
       <Box py="1rem">Correo de usuario: {data}</Box>
       <ButtonGroup
-          fullWidth
-          sx={{ marginTop: 1 }}
-          disableElevation
-          variant="contained"
+        fullWidth
+        sx={{ marginTop: 1 }}
+        disableElevation
+        variant="contained"
+      >
+        <Button
+          sx={{ opacity: 0.7, backgroundColor: '#696969' }}
+          onClick={handleClose}
         >
-          <Button
-            sx={{ opacity: 0.7, backgroundColor: "#696969" }}
-            onClick={handleClose}
-          >
-            Cancelar
-          </Button>
-          <Button
-            variant="contained"
-            disabled={loading}
-            onClick={deleteUser}
-          >
-            Borrar usuario
-          </Button>
-        </ButtonGroup>
+          Cancelar
+        </Button>
+        <Button variant="contained" disabled={loading} onClick={deleteUser}>
+          Borrar usuario
+        </Button>
+      </ButtonGroup>
     </Box>
   );
 };
 
-const UpdateUserForm = ({data, table, setTable, handleClose}) => {
+const UpdateUserForm = ({
+  data,
+  table,
+  setTable,
+  handleClose,
+  openSnackbar,
+  setMessage,
+}) => {
   const { handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
   const [values, setValues] = React.useState({
-    email: "",
-    password: "",
-    rol: "",
+    email: '',
+    password: '',
+    rol: '',
     showPassword: false,
   });
   const handleClickShowPassword = () => {
@@ -283,35 +301,39 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
   };
 
   const updateUser = (event) => {
-    const newData = {}
+    const newData = {};
     if (data.email !== event.email) newData.email = event.email;
     if (event.password !== '') newData.password = event.password;
-    if (event.rol !== 'select') newData.roles = {
-      rol: event.rol,
-      admin: event.rol === 'admin',
-    }
+    if (event.rol !== 'select')
+      newData.roles = {
+        rol: event.rol,
+        admin: event.rol === 'admin',
+      };
     setLoading(true);
-    updateData('users', data.email, newData)
-      .then((response) => {
-        if (!response.err) {
-          setTable({
-            ...table,
-            body: table.body.map((item) => {
-              if (item._id === data._id){
-                return {
-                  ...item,
-                  roles: response.roles.rol,
-                }
-              } else {
-                return item
-              }})
-          });
-        } else {
-          console.log(response)
-        }
-        setLoading(false);
-        handleClose();
-      })
+    updateData('users', data.email, newData).then((response) => {
+      if (!response.err) {
+        setTable({
+          ...table,
+          body: table.body.map((item) => {
+            if (item._id === data._id) {
+              return {
+                ...item,
+                roles: response.roles.rol,
+              };
+            } else {
+              return item;
+            }
+          }),
+        });
+        setMessage({ color: 'success', text: 'Se actualizo usuario' });
+        openSnackbar();
+      } else {
+        setMessage({ color: 'error', text: response.message });
+        openSnackbar();
+      }
+      setLoading(false);
+      handleClose();
+    });
   };
 
   return (
@@ -356,7 +378,7 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
             pattern: {
               value:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Debes usar un email válido",
+              message: 'Debes usar un email válido',
             },
           }}
         />
@@ -375,7 +397,7 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
               fullWidth
               name="password"
               label="Contraseña"
-              type={values.showPassword ? "text" : "password"}
+              type={values.showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               InputProps={{
@@ -399,17 +421,18 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
           rules={{
             minLength: {
               value: 8,
-              message: "Contraseña debe tener al menos 8 caracteres",
+              message: 'Contraseña debe tener al menos 8 caracteres',
             },
             pattern: {
               value:
                 /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
               message:
-                "Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial",
+                'Contraseña debe tener al menos 1 caracter alfabético ,1 caracter numérico y un caracter especial',
             },
             validate: {
               equals: (password) =>
-                password !== "password123#" || "Escoge una contraseña mas segura",
+                password !== 'password123#' ||
+                'Escoge una contraseña mas segura',
             },
           }}
         />
@@ -442,16 +465,12 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
           variant="contained"
         >
           <Button
-            sx={{ opacity: 0.7, backgroundColor: "#696969" }}
+            sx={{ opacity: 0.7, backgroundColor: '#696969' }}
             onClick={handleClose}
           >
             Cancelar
           </Button>
-          <Button
-            variant="contained"
-            disabled={loading}
-            type="submit"
-          >
+          <Button variant="contained" disabled={loading} type="submit">
             Actualizar usuario
           </Button>
         </ButtonGroup>
@@ -460,7 +479,15 @@ const UpdateUserForm = ({data, table, setTable, handleClose}) => {
   );
 };
 
-export default function BasicModal({ modal, setModal, actionForm, table, setTable }) {
+export default function BasicModal({
+  modal,
+  setModal,
+  actionForm,
+  table,
+  setTable,
+  openSnackbar,
+  setMessage,
+}) {
   const handleClose = () => setModal(false);
   return (
     <Modal
@@ -479,9 +506,35 @@ export default function BasicModal({ modal, setModal, actionForm, table, setTabl
           <Typography id="modal-title" variant="h6" component="h2">
             {actionForm?.title}
           </Typography>
-          { actionForm?.nameForm === 'add' && <AddUserForm handleClose={handleClose} table={table} setTable={setTable}/>}
-          { actionForm?.nameForm === 'delete' && <DeleteUserForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable}/>}
-          { actionForm?.nameForm === 'update' && <UpdateUserForm data={actionForm?.data} handleClose={handleClose} table={table} setTable={setTable}/>}
+          {actionForm?.nameForm === 'add' && (
+            <AddUserForm
+              handleClose={handleClose}
+              table={table}
+              setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
+            />
+          )}
+          {actionForm?.nameForm === 'delete' && (
+            <DeleteUserForm
+              data={actionForm?.data}
+              handleClose={handleClose}
+              table={table}
+              setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
+            />
+          )}
+          {actionForm?.nameForm === 'update' && (
+            <UpdateUserForm
+              data={actionForm?.data}
+              handleClose={handleClose}
+              table={table}
+              setTable={setTable}
+              openSnackbar={openSnackbar}
+              setMessage={setMessage}
+            />
+          )}
         </Box>
       </Fade>
     </Modal>
