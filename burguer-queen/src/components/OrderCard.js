@@ -16,7 +16,8 @@ import {
 import TimerIcon from '@mui/icons-material/Timer';
 import getTime from '../helpers/date';
 
-export default function OrderCard({ order, action }) {
+
+export default function OrderCard({ order, action, updateOrder}) {
   const { _id, client, products, status, dateEntry, dateProcessed } = order;
   const subtotal = products.reduce(
     (sum, item) => item.product?.price ?? 0 + sum,
@@ -93,14 +94,14 @@ export default function OrderCard({ order, action }) {
                 opacity: 0.5,
               },
             }}
-            // onClick={handleClose}
+            onClick={() => updateOrder(_id, 'cancelado')}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
             color={action.color}
-            // disabled={loading}
+            onClick={() => updateOrder(_id, action.nextStatus)}
           >
             {action.name}
           </Button>
