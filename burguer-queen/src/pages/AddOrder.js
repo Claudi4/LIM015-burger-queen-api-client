@@ -23,42 +23,32 @@ export default function AddOrder() {
   const auth = useAuth();
   const { open, close, message, openSnackbar, setMessage } = useSnackbar();
   const [state, dispatch] = useReducer(shoppingReducer, shoppingInitialState);
-  const { products, cart } = state;
-  const [client, setClient] = useState('');
+  const { products, cart, client } = state;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    // setLoading(true);
     let cancel = false;
     getData('products?limit=1000').then((response) => {
       if (cancel) return;
       if (!response.err) {
         dispatch({ type: TYPES.READ_PRODUCTS, payload: response });
-        //setError(null);
       } else {
         dispatch({ type: TYPES.NO_DATA });
-        // setError(response);
       }
     });
-    // setLoading(false);
     return () => {
       cancel = true;
     };
   }, []);
-
-  const handleChange = (event) => {
-    setClient(event.target.value);
-  };
 
   const addToCart = (id) => {
     dispatch({ type: TYPES.ADD_TO_CART, payload: id });
   };
 
   const delFromCart = (id, all = false) => {
-    if (all) {
-      dispatch({ type: TYPES.REMOVE_ALL_FROM_CART, payload: id });
-    } else {
-      dispatch({ type: TYPES.REMOVE_ONE_FROM_CART, payload: id });
-    }
+    dispatch({
+      type: all ? TYPES.REMOVE_ALL_FROM_CART : TYPES.REMOVE_ONE_FROM_CART,
+      payload: id,
+    });
   };
 
   const clearCart = () => {
@@ -79,7 +69,6 @@ export default function AddOrder() {
           setMessage({ color: 'success', text: 'Se envio pedido a cocina' });
           openSnackbar();
           clearCart();
-          setClient('');
         } else {
           setMessage({ color: 'error', text: response.message });
           openSnackbar();
@@ -109,7 +98,7 @@ export default function AddOrder() {
           id="outlined-client"
           label="Cliente"
           value={client}
-          onChange={handleChange}
+          onChange={(event) => dispatch({ type: TYPES.SET_CLIENT, client: event.target.value})}
           sx={{ marginBottom: 2 }}
         />
         <SpanningTable products={cart} deleteProduct={delFromCart} />
@@ -120,7 +109,15 @@ export default function AddOrder() {
           variant="contained"
         >
           <Button
-            sx={{ opacity: 0.7, backgroundColor: '#696969' }}
+            sx={{
+              opacity: 0.9,
+              color: '#fff',
+              backgroundColor: '#515862',
+              '&:hover': {
+                backgroundColor: '#696969',
+                opacity: 0.7,
+              },
+            }}
             onClick={clearCart}
           >
             Cancelar

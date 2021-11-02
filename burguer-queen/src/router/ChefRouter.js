@@ -5,6 +5,7 @@ import MainBar from '../components/Layout/MainBar';
 import SideBar from "../components/Layout/SideBar";
 import Topic from "../components/Layout/Content";
 import useAuth from "../services/auth/useAuth";
+import Orders from "../pages/Orders";
 
 import BookIcon from '@mui/icons-material/Book';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -21,7 +22,7 @@ const ChefRouter = () => {
       route: '/pedidos',
       text: 'Pedidos',
       icon: <BookIcon />,
-      main: <h2>Pedidos</h2>
+      main: <Orders />
     },
   ];
   const auth = useAuth();

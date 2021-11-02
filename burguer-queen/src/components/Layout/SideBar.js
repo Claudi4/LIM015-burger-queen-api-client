@@ -59,7 +59,7 @@ export default function SideBar({open, handleDrawerClose, routes}) {
   return (
     <Drawer variant="permanent" open={open}>
       <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton aria-label="close drawer" onClick={handleDrawerClose}>
           <ChevronLeftIcon />
         </IconButton>
       </DrawerHeader>
