@@ -82,13 +82,13 @@ export default function AddOrder() {
     <Grid
       container
       component="main"
-      rowSpacing={1}
+      rowSpacing={3}
       columnSpacing={{ xs: 1, sm: 2, md: 3 }}
     >
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={5} md={6}>
         <Tabs products={products} addProduct={addToCart} />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={7} md={6}>
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
           Pedido
         </Typography>

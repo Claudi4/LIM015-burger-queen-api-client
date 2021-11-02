@@ -10,14 +10,15 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  minWidth: 100,
+  minWidth: 300,
+  maxWidth: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-export default function BasicModal({ modal, setModal, title, message }) {
+export default function BasicModal({ modal, setModal, message }) {
   const handleClose = () => setModal(false);
   return (
     <Modal
@@ -34,10 +35,10 @@ export default function BasicModal({ modal, setModal, title, message }) {
       <Fade in={modal}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            {title}
+            {message.title}
           </Typography>
           <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-            {message}
+            {message.content}
           </Typography>
         </Box>
       </Fade>

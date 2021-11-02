@@ -3,7 +3,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import ProductListCard from './ProductListCard';
-import Pagination from './Pagination';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,7 +56,6 @@ export default function BasicTabs({ products, addProduct }) {
           products={products}
           addProduct={addProduct}
         />
-        <Pagination counter={3} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProductListCard
@@ -65,7 +63,6 @@ export default function BasicTabs({ products, addProduct }) {
           products={products}
           addProduct={addProduct}
         />
-        <Pagination counter={3} />
       </TabPanel>
     </Box>
   );

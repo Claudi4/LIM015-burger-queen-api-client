@@ -28,7 +28,7 @@ const theme = createTheme({
           padding: '0.7rem',
           '&:last-child': {
             paddingBottom: '0.7rem',
-          }
+          },
         }
       },
     },
