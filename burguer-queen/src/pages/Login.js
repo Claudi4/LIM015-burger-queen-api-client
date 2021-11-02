@@ -5,6 +5,7 @@ import {
   Box,
   TextField,
   Button,
+  IconButton,
   CssBaseline,
   InputAdornment,
 } from '@mui/material';
@@ -12,23 +13,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useAuth from '../services/auth/useAuth';
-import IconButton from '@mui/material/IconButton';
 import { useForm, Controller } from 'react-hook-form';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  minWidth: 300,
-  maxWidth: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import Modal from '../components/Feedback/Modal';
 
 let errorMessage = '';
 
@@ -65,7 +51,6 @@ const Login = () => {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   return (
     <div>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -229,21 +214,10 @@ const Login = () => {
         </Grid>
       </Grid>
       <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          {/* mostarmos la data almacenada en el servicio */}
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {errorMessage}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Por favor ingresar un usuario valido.
-          </Typography>
-        </Box>
-      </Modal>
+        modal={open}
+        setModal={setOpen}
+        message={{ title: errorMessage, content: 'Por favor ingresar un usuario valido.' }}
+      />
     </div>
   );
 };

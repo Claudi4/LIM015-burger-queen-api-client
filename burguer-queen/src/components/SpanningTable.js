@@ -12,10 +12,6 @@ import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 const TAX_RATE = 0.18;
 
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
 function subtotal(items) {
   return items
     .map(({ totalPrice }) => totalPrice)
@@ -50,9 +46,9 @@ export default function SpanningTable({ products, deleteProduct }) {
             <TableRow key={product.id}>
               <TableCell>{product.name}</TableCell>
               <TableCell align="right">{product.quantity}</TableCell>
-              <TableCell align="right">{ccyFormat(product.price)}</TableCell>
+              <TableCell align="right">{product.price.toFixed(2)}</TableCell>
               <TableCell align="right">
-                {ccyFormat(product.totalPrice)}
+                {product.totalPrice.toFixed(2)}
               </TableCell>
               <TableCell align="right">
                 <IconButton onClick={() => deleteProduct(product.id)}>
@@ -67,18 +63,16 @@ export default function SpanningTable({ products, deleteProduct }) {
           <TableRow>
             <TableCell rowSpan={3} />
             <TableCell colSpan={2}>Subtotal</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+            <TableCell align="right">{invoiceSubtotal.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>IGV</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-              0
-            )} %`}</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+            <TableCell align="right">{invoiceTaxes.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell align="right">{invoiceTotal.toFixed(2)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

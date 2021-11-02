@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-//import logo from '../../assets/images/Logo.svg';
 import useAuth from "../../services/auth/useAuth";
 
 const drawerWidth = 180;
