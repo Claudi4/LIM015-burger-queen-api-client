@@ -246,21 +246,15 @@ const DeleteProductsForm = ({ data, table, setTable, handleClose }) => {
 };
 
 const UpdateProductsForm = ({ data, table, setTable, handleClose }) => {
-  console.log("DATA PARA ACTUALIZAR: ", data);
   const { handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
 
   const updateProdutds = (event) => {
     const newData = {};
-    console.log('event.image', event.image);
     if (data.name !== event.producto) newData.name = event.producto;
     if (data.price !== event.precio && event.precio !== "") newData.price = event.precio;
     if (data.image !== event.image && event.image !== "") newData.image = event.image;
     if (event.type !== "") newData.type = event.type;
-    /*if (event.type !== 'select') newData.type = {
-            type: event.type,
-            desayuno: event.type === 'desayuno',
-        }*/
     setLoading(true);
     updateData("products", data._id, newData).then((response) => {
       if (!response.err) {
