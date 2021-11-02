@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React  from "react";
 import {
   Box,
   Typography,
@@ -15,6 +15,8 @@ import {
 import CardContent from "@mui/material/CardContent";
 import TimerIcon from "@mui/icons-material/Timer";
 import getTime from "../helpers/date";
+import { updateOrders } from "../helpers/put";
+
 
 export default function OrderCard({ order, action }) {
   const { _id, client, products, status, dateEntry, dateProcessed } = order;
@@ -47,6 +49,23 @@ export default function OrderCard({ order, action }) {
   const styled = {
     marginRight: '10px'
   };
+
+  function goAction(_id, action) {
+    console.log(_id);
+    console.log(action.toLowerCase());
+    const newstatus = {
+      //armar la estructura que se enviara al servicio
+      status: action.toLowerCase()
+    }
+    updateOrders('orders', _id, newstatus)
+      .then((response) => {
+        if (!response.err) {
+          //ahi va la funcion para llamr al listado
+        } else {
+          console.log(response)
+        }
+      })
+  }
   return (
     <Card sx={{ display: "flex" }}>
       <CardContent sx={{ flex: "1 0 auto" }}>
@@ -117,6 +136,7 @@ export default function OrderCard({ order, action }) {
           <Button
             variant="contained"
             color={action.color}
+            onClick={() => goAction(_id, action.name)}
           // disabled={loading}
           >
             {action.name}
