@@ -55,7 +55,6 @@ const AddProductsForm = ({
     };
     postData('products', data).then((response) => {
       if (!response.err) {
-        const { _id, image, name, type, price } = response;
         setTable({
           ...table,
           body: [response, ...table.body],
@@ -292,12 +291,9 @@ const UpdateProductsForm = ({
       setLoading(false);
       handleClose();
     });
-    handleOpen2();
   };
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen2 = () => setOpen(true);
-  const handleClose2 = () => setOpen(true);
+
 
   return (
     <div>
@@ -431,24 +427,6 @@ const UpdateProductsForm = ({
         </ButtonGroup>
       </Box>
       </Box>
-      <Box>
-        <Modal
-          open={open}
-          onClose={handleClose2}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            {/* mostarmos la data almacenada en el servicio */}
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              actualizar producto
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              el producto ha sido actualizado
-            </Typography>
-          </Box>
-        </Modal>
-      </Box>
     </div>
   );
 };
@@ -516,7 +494,7 @@ export default function BasicModal({
   );
 }
 
-export function BasicModalSucces({ modal, setModal, title, message }) {
+/*export function BasicModalSucces({ modal, setModal, title, message }) {
   const handleClose = () => setModal(false);
   return (
     <Modal
@@ -542,4 +520,4 @@ export function BasicModalSucces({ modal, setModal, title, message }) {
       </Fade>
     </Modal>
   )
-}
+}*/
