@@ -35,10 +35,10 @@ export default function BasicModal({ modal, setModal, message }) {
       <Fade in={modal}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            {message.title}
+            {message?.title}
           </Typography>
           <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-            {message.content}
+            {message?.content}
           </Typography>
         </Box>
       </Fade>
